@@ -41,6 +41,8 @@ public class Match {
                     name = "event_id", referencedColumnName = "id"))
     private Collection<Event> events;
     
+    
+    
 	public Match(String victor, String loser, String date) {
 		super();
 		this.victor = victor;

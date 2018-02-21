@@ -3,8 +3,168 @@
 <head>
     <title>Match</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+
+    
 </head>
 <body>
-    <p th:text="'Match of ' + ${part1} + ' and ' + ${part2}" />
+    <p th:text="'Match of ' + ${part1} + ' and ' + ${part2}"/>
+<p id="demo"></p>
+
+<table>
+
+	<tr>
+		<th>
+			<p th:text="${part1}"/>
+		</th>
+		<th>
+			<h1 id="time"><time >00:00:00</time></h1>
+			<button id="start">start</button>
+			<button id="stop">stop</button>
+			<button id="clear">clear</button>
+		</th>			
+		<th>
+			<p th:text="${part2}"/>
+		</th>
+	</tr>
+	<tr>
+		<td>
+			<button onclick="addFields('Ippon')" >Ippon!</button>
+		</td>
+		<td>
+			
+		</td>
+		<td>
+			<button onclick="addFields('Ippon')">Ippon!</button>
+		</td>
+	</tr>
+		<tr>
+		<td>
+			<button onclick="addFields('Wazari')" >Wazari</button>
+		</td>
+		<td>
+			
+		</td>
+		<td>
+			<button onclick="addFields('Wazari')">Wazari</button>
+		</td>
+	</tr>
+		<tr>
+		<td>
+			<button onclick="addFields('Shido')" >Shido</button>
+		</td>
+		<td>
+			
+		</td>
+		<td>
+			<button onclick="addFields('Shido')">Shido</button>
+		</td>
+	</tr>
+		<tr>
+		<td>
+			<button onclick="addFields(' ')" >Event</button>
+		</td>
+		<td>
+			
+		</td>
+		<td>
+			<button onclick="addFields(' ')" >Event</button>
+		</td>
+	</tr>
+
+</table>  
+<br/>
+
+<a href="#" id="filldetails" onclick="addFields()" class="btn btn-default">Add event</a>
+ 
+ 	<form action="/competition/save">
+    <div id="container"></div>
+    <input type="submit" value="Submit">
+    </form>
+
+
 </body>
+
+    <script th:inline="javascript">
+
+    var h1 = document.getElementsByTagName('h1')[0],
+    start = document.getElementById('start'),
+    stop = document.getElementById('stop'),
+    clear = document.getElementById('clear'),
+    seconds = 0, minutes = 0, hours = 0,
+    t;
+
+function add() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+    
+    h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+
+    timer();
+}
+function timer() {
+	clearTimeout(t);
+    t = setTimeout(add, 1000);
+}
+
+
+
+/* Start button */
+start.onclick = timer;
+
+/* Stop button */
+stop.onclick = function() {
+    clearTimeout(t);
+}
+
+/* Clear button */
+clear.onclick = function() {
+    h1.textContent = "00:00:00";
+    seconds = 0; minutes = 0; hours = 0;
+}
+
+function myFunction() {
+    document.getElementById("demo").innerHTML = "Hello World";
+}
+    
+var count =0;   
+
+
+function addFields(type){
+	
+	count = count + 1;
+	
+   
+    var container = document.getElementById("container");
+
+    	container.appendChild(document.createTextNode("Type"));
+        var input = document.createElement("input");
+        input.type = "text";
+        input.value = type;
+        container.appendChild(input);
+        container.appendChild(document.createTextNode("  Timestamp "));
+        
+        var input = document.createElement("input");
+        input.type = "text";
+        input.value = document.getElementById("time").textContent;
+        container.appendChild(input);
+        container.appendChild(document.createTextNode("  Details(optional)"));
+        
+        var input = document.createElement("input");
+        input.type = "text";
+        container.appendChild(input);
+        container.appendChild(document.createElement("br"));
+
+}
+
+    </script>
+
 </html>

@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +14,15 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.annotation.SessionScope;
 
 import com.example.judoku.model.Competition;
+import com.example.judoku.model.Match;
 import com.example.judoku.model.User;
 import com.example.judoku.repository.CompetitionRepository;
 import com.example.judoku.repository.UserRepository;
@@ -105,7 +110,7 @@ public class CompetitionController {
     			String name1 = names.get(i-1);
     			String name2 = names.get(i);	
     			
-    			buttons.add("<a href=\"http://localhost:8080/competition/" + name1 + "-" + name2 + "\" class=\"btn btn-default\">Match Start!</a>");
+    			buttons.add("<a href=\"http://localhost:8080/competition/" + name1 + "-" + name2 + "\" >Match Start!</a>");
         		matchNum.add(counter3);
         		counter3++;
     		}
@@ -147,5 +152,13 @@ public class CompetitionController {
 		map.addAttribute("part2", part2);
 	    return "match";
 	}
+	@PostMapping("/competition/save")
+	public String matchPost(@Valid @RequestBody Match match) {
+	
+		
+		//  userRepository.save(user);
+	    return "match2";
+	}
+
     
 }
