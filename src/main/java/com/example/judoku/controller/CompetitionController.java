@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.annotation.SessionScope;
 
 import com.example.judoku.model.Competition;
+import com.example.judoku.model.Event;
 import com.example.judoku.model.Match;
+import com.example.judoku.model.MatchPost;
 import com.example.judoku.model.User;
 import com.example.judoku.repository.CompetitionRepository;
 import com.example.judoku.repository.UserRepository;
@@ -102,9 +105,6 @@ public class CompetitionController {
     	int counter = 1;
     	for(int i=0; i<names.size(); i++)
     	{
-    		
-    	
-
     		if((counter%2==0))
     		{
     			String name1 = names.get(i-1);
@@ -123,12 +123,7 @@ public class CompetitionController {
     		counter++;
     	}
     	
-    	
-    	
-   
-    	
-    	
-    	
+	
     	buttons.add("TEEEEEEEST");
         map.addAttribute("welcomeMessage", "welcome");
         map.addAttribute("names", names);
@@ -152,13 +147,59 @@ public class CompetitionController {
 		map.addAttribute("part2", part2);
 	    return "match";
 	}
-	@PostMapping("/competition/save")
-	public String matchPost(@Valid @RequestBody Match match) {
-	
-		
-		//  userRepository.save(user);
-	    return "match2";
-	}
+//	@PostMapping("/competition/save")
+//	public String matchPost(@Valid @RequestBody Event match) {
+//	
+//		
+//	
+//	    return "match2";
+//	}
+
+    @PostMapping("/competition/save")
+    public String formPost(MatchPost matchPost, ModelMap model) {
+  
+    
+   
+    	Event event2 = new Event();
+    	System.out.println(model.toString());
+    	System.out.println("=====================");
+    	System.out.println(matchPost.toString());
+    	System.out.println("=====================");
+    	
+    	ArrayList<String> types = new ArrayList<String>();
+    	for(String word : matchPost.getEventType().split(",")) {
+    	    types.add(word);
+    	}
+    	ArrayList<String> timestamps = new ArrayList<String>();
+    	for(String word : matchPost.getEventTimestamp().split(",")) {
+    	    timestamps.add(word);
+    	}
+    	ArrayList<String> descriptions = new ArrayList<String>();
+    	for(String word : matchPost.getEventDescription().split(",")) {
+    	    descriptions.add(word);
+    	}
+    	ArrayList<String> eventPlayers = new ArrayList<String>();
+    	for(String word : matchPost.getEventPlayer().split(",")) {
+    	    eventPlayers.add(word);
+    	}
+    	
+    	
+    	for(int i = 0; i<types.size(); i++)
+    	{ 		
+    		System.out.println(types.get(i) + timestamps.get(i) + descriptions.get(i) + eventPlayers.get(i));
+    	}
+    	for(String string:types)
+    	{
+    		System.out.println(string);
+    	}
+    	
+    	
+    	//System.out.println(model.get("event").toString());
+    	//System.out.println(model.get("type"));
+     //   model.addAttribute("event", event2);
+       
+        return "match2";
+    }
 
     
 }

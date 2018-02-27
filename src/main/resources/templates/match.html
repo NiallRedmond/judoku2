@@ -78,7 +78,8 @@
 
 <a href="#" id="filldetails" onclick="addFields()" class="btn btn-default">Add event</a>
  
- 	<form action="/competition/save">
+ 	<!-- <form action="#" th:action="@{/competition/save}" th:object="${event}" method="post"> -->
+ 	   <form action="/competition/save" method="post">
     <div id="container"></div>
     <input type="submit" value="Submit">
     </form>
@@ -87,6 +88,16 @@
 </body>
 
     <script th:inline="javascript">
+    
+    /*<![CDATA[*/
+
+    var player1 = /*[[${part1}]]*/ 'default';
+    console.log(player1);
+    var player2 = /*[[${part2}]]*/ 'default';
+    console.log(player2);
+
+	/*]]>*/
+    
 
     var h1 = document.getElementsByTagName('h1')[0],
     start = document.getElementById('start'),
@@ -142,29 +153,51 @@ function addFields(type){
 	
 	count = count + 1;
 	
-   
+	 document.getElementById("demo").innerHTML = player1;
     var container = document.getElementById("container");
 
     	container.appendChild(document.createTextNode("Type"));
         var input = document.createElement("input");
         input.type = "text";
+        input.name ="eventType";
         input.value = type;
         container.appendChild(input);
-        container.appendChild(document.createTextNode("  Timestamp "));
         
+        container.appendChild(document.createTextNode("  Timestamp ")); 
         var input = document.createElement("input");
         input.type = "text";
+        input.name ="eventTimestamp";
         input.value = document.getElementById("time").textContent;
         container.appendChild(input);
-        container.appendChild(document.createTextNode("  Details(optional)"));
+      
+		var select = document.createElement("select");
+		select.name= "eventPlayer";
+		
+		var option = document.createElement("option");
+
+		option.value = player1;
+	
+		option.appendChild(document.createTextNode(player1));
+		select.appendChild(option);
+	
+		var option = document.createElement("option");
+		option.value= player2;
+		option.appendChild(document.createTextNode(player2));
+		select.appendChild(option);
+
+		 container.appendChild(select);
+		  
         
+        container.appendChild(document.createTextNode("  Details(optional)"));
         var input = document.createElement("input");
         input.type = "text";
+        input.name ="eventDescription";
+        input.value = " ";
         container.appendChild(input);
+        
         container.appendChild(document.createElement("br"));
 
 }
 
     </script>
-
 </html>
