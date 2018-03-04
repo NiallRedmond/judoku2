@@ -21,6 +21,7 @@ public class Competition {
     private String date;
     private String venue;
     private String password;
+    private Boolean signUpOpen;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -53,6 +54,25 @@ public class Competition {
 		this.venue = venue;
 		this.password = password;
 		this.competitors = competitors;
+	}
+	
+	
+	
+
+	public Boolean getSignUpOpen() {
+		return signUpOpen;
+	}
+
+	public void setSignUpOpen(Boolean signUpOpen) {
+		this.signUpOpen = signUpOpen;
+	}
+
+	public Collection<Match> getMatches() {
+		return matches;
+	}
+
+	public void setMatches(Collection<Match> matches) {
+		this.matches = matches;
 	}
 
 	public Long getId() {

@@ -10,10 +10,13 @@ import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.annotation.SessionScope;
 
+import com.example.judoku.dto.CompetitionCreationDTO;
+import com.example.judoku.dto.Email;
+import com.example.judoku.dto.UserRegistrationDto;
 import com.example.judoku.model.Competition;
 import com.example.judoku.model.Event;
 import com.example.judoku.model.Match;
@@ -40,27 +46,12 @@ public class CompetitionController {
 	
 	@Autowired
 	CompetitionRepository competitionRepository;
-/**
-    @GetMapping("/competition")
-    public String competition(Model model) {
-    	String name = "test";
-    	model.addAttribute(name);
-        return "competition";
 
-    }**/
-    /**
-    @RequestMapping("/competition")
-    public String competition(@RequestParam(value="name", required=false, defaultValue="World") String name, Model model) {
-    	 name = "test";
-    	 String name2 = "test";
-    	model.addAttribute(name);
-    	model.addAttribute(name2, "TEST");
-        return "competition";
-        
-        
-    }**/
 
-    
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+
     
 
 	@GetMapping("/competitions")
@@ -184,15 +175,15 @@ public class CompetitionController {
     	}
     	
     	
+    	    
+    	
+    	
+    	
     	for(int i = 0; i<types.size(); i++)
     	{ 		
     		System.out.println(types.get(i) + timestamps.get(i) + descriptions.get(i) + eventPlayers.get(i));
     	}
-    	for(String string:types)
-    	{
-    		System.out.println(string);
-    	}
-    	
+
     	
     	//System.out.println(model.get("event").toString());
     	//System.out.println(model.get("type"));
@@ -200,6 +191,56 @@ public class CompetitionController {
        
         return "match2";
     }
+    
+    
+    @GetMapping("/createCompetition")
+    public String competitonForm(Model model) {
+        model.addAttribute("competition", new Competition());
+        return "createCompetition";
+    }
 
+
+    
+    @PostMapping("/createCompetition")
+    public String createCompetition(@ModelAttribute("competition") @Valid CompetitionCreationDTO competitionDto, 
+                                      BindingResult result){
+    	
+
+
+        if (result.hasErrors()){
+            return "createCompetition";
+        }
+
+      //  userService.save(competitionDto);
+        System.out.println(competitionDto.toString());
+        
+        Competition comp = new Competition();
+        comp.setName(competitionDto.getName());
+        comp.setDate(competitionDto.getDate());
+        comp.setVenue(competitionDto.getVenue());
+        comp.setPassword(passwordEncoder.encode(competitionDto.getPassword()));
+
+        competitionRepository.save(comp);
+        
+        return "redirect:/createCompetition?success";
+        
+
+    }
+    
+	@GetMapping("/competitions/{id}")
+	public String viewCompetition(@PathVariable(value = "id") Long competitionId, ModelMap map) {
+	    Competition comp = competitionRepository.findOne(competitionId);
+	  	Email email = new Email();
+	    map.addAttribute("competition", comp);	
+	    map.addAttribute("email", email);	
+	    return "viewCompetition";
+	}
+    
+    @PostMapping("/competitions/{id}")
+    public String viewCompetitionAddCompetitor(@ModelAttribute Email email) {
+        
+    	System.out.println(email.getText());
+    	return "viewCompetition";
+    }
     
 }

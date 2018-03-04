@@ -58,7 +58,7 @@
     
     
    
-</dependency>
+		</dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -140,6 +140,12 @@
    <groupId>net.sourceforge.nekohtml</groupId>
    <artifactId>nekohtml</artifactId>
    <version>1.9.21</version>
+</dependency>
+        
+        <dependency>
+    <groupId>org.unbescape</groupId>
+    <artifactId>unbescape</artifactId>
+    <version>1.0</version>
 </dependency>
         
 	</dependencies>
