@@ -1,6 +1,7 @@
 package com.example.judoku.controller;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,7 @@ import com.example.judoku.model.Match;
 import com.example.judoku.model.MatchPost;
 import com.example.judoku.model.User;
 import com.example.judoku.repository.CompetitionRepository;
+import com.example.judoku.repository.EventRepository;
 import com.example.judoku.repository.UserRepository;
 
 import groovy.lang.Grab;
@@ -49,14 +51,13 @@ public class CompetitionController {
 	CompetitionRepository competitionRepository;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	EventRepository eventRepository;
 
 
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
-
-    
 
 	@GetMapping("/competitions")
 	public List<Competition> getAllCompetitions() {
@@ -119,7 +120,7 @@ public class CompetitionController {
     			String id1 = names.get(i-1).getId().toString();
     			String id2 = names.get(i).getId().toString();
     			
-    			buttons.add("<a href=\"http://localhost:8080/competition/" + name1 + "_" + id1 + "-" + name2 + "_" + id2 + "\" >Match Start!</a>");
+    			buttons.add("<a href=\"http://localhost:8080/competition/" + competitionId + "/" + name1 + "_" + id1 + "-" + name2 + "_" + id2 + "\" >Match Start!</a>");
         		matchNum.add(counter3);
         		counter3++;
     		}
@@ -143,8 +144,8 @@ public class CompetitionController {
         return "competition";
     }
     
-	@GetMapping("/competition/{competitors}")
-	public String match(ModelMap map, @PathVariable(value = "competitors") String competitors, Principal principal) {
+	@GetMapping("/competition/{id}/{competitors}")
+	public String match(ModelMap map, @PathVariable(value = "id") Long competitionId, @PathVariable(value = "competitors") String competitors, Principal principal) {
 	
 		String[] parts = competitors.split("-");
 		String part1 = parts[0]; 
@@ -172,6 +173,7 @@ public class CompetitionController {
 		System.out.println("===========================================================");
 		map.addAttribute("competitor1", competitor1);
 		map.addAttribute("competitor2", competitor2);
+		map.addAttribute("competitionId", competitionId);
 	    return "match";
 	}
 //	@PostMapping("/competition/save")
@@ -185,13 +187,24 @@ public class CompetitionController {
     @PostMapping("/competition/save")
     public String formPost(MatchPost matchPost, ModelMap model) {
   
-    
+    	String[] parts = matchPost.getLoser().split("_");
+    	if(parts[0].equals(matchPost.getVictor()))
+    	{
+    		matchPost.setLoser(parts[1]);
+    	}
+    	if(parts[1].equals(matchPost.getVictor()))
+    	{
+    		matchPost.setLoser(parts[0]);
+    	}
+   
    
     	Event event2 = new Event();
     	System.out.println(model.toString());
     	System.out.println("=====================");
     	System.out.println(matchPost.toString());
     	System.out.println("=====================");
+    	
+    	
     	
     	ArrayList<String> types = new ArrayList<String>();
     	for(String word : matchPost.getEventType().split(",")) {
@@ -210,8 +223,47 @@ public class CompetitionController {
     	    eventPlayers.add(word);
     	}
     	
+    	User user1 = userRepository.findOne(Long.parseLong(matchPost.getVictor()));
+    
+    	User user2 = userRepository.findOne(Long.parseLong(matchPost.getLoser()));
     	
-    	    
+    	
+    	Competition comp = competitionRepository.findOne(Long.parseLong(matchPost.getCompetition()));
+    	Match match = new Match();
+    	match.setDate(LocalDateTime.now().toString());
+    	match.setVictor(matchPost.getVictor());
+    	match.setLoser(matchPost.getLoser());
+    	match.setEvents(new ArrayList<Event>());
+    	for(int i = 0; i<types.size(); i++)
+    	{
+    		Event event = new Event();
+    		event.setType(types.get(i));
+    		event.setTimetsamp(timestamps.get(i));
+    		event.setDescription(descriptions.get(i));
+    	
+
+    		if(eventPlayers.get(i).equals(user1.getId().toString()))
+    		{
+    			event.setUser(user1.getId().toString());
+    			user1.getEvents().add(event);
+    		}
+    		if(eventPlayers.get(i).equals(user2.getId().toString()))
+    		{
+    			event.setUser(user2.getId().toString());
+    			user2.getEvents().add(event);
+    		}
+    		
+    		match.getEvents().add(event);
+    	}
+    	
+    	user1.getMatches().add(match);
+    	user2.getMatches().add(match);
+    	
+    	comp.getMatches().add(match);
+    	
+    	competitionRepository.save(comp);
+    	userRepository.save(user1);
+    	userRepository.save(user2);
     	
     	
     	

@@ -16,7 +16,7 @@ public class Event {
     private String type;
     private String timetsamp;
     private String description;
-    
+    private String user;
     
 	public Event(String type, String timetsamp, String description) {
 		super();
@@ -24,6 +24,19 @@ public class Event {
 		this.timetsamp = timetsamp;
 		this.description = description;
 	}
+	
+	
+
+	public String getUser() {
+		return user;
+	}
+
+
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
 
 
 	public Event() {

@@ -52,6 +52,16 @@ public class User {
                     name = "match_id", referencedColumnName = "id"))
     private Collection<Match> matches;
     
+    @OneToMany(cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JoinTable(
+            name = "users_events",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "event_id", referencedColumnName = "id"))
+    private Collection<Event> events;
+    
     public User() {
     }
 
@@ -73,7 +83,23 @@ public class User {
     
     
 
-    public Collection<Comment> getComments() {
+    public Collection<Match> getMatches() {
+		return matches;
+	}
+
+	public void setMatches(Collection<Match> matches) {
+		this.matches = matches;
+	}
+
+	public Collection<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(Collection<Event> events) {
+		this.events = events;
+	}
+
+	public Collection<Comment> getComments() {
 		return comments;
 	}
 

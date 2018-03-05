@@ -64,6 +64,16 @@ public Match(String victor, String loser, String date, Collection<Event> events)
 	this.events = events;
 }
 
+
+
+public Collection<Event> getEvents() {
+	return events;
+}
+
+public void setEvents(Collection<Event> events) {
+	this.events = events;
+}
+
 public Long getId() {
 	return id;
 }
@@ -92,7 +102,7 @@ public String getDate() {
 	return date;
 }
 
-public void setString(String date) {
+public void setDate(String date) {
 	this.date = date;
 }
     

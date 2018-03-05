@@ -86,6 +86,7 @@
  	  	 <option th:value="${competitor2.id}" th:text="${competitor2.name}" ></option>
  	 </select>
  		 <input type="hidden" name="loser" th:value="${competitor1.id} +'_'+${competitor2.id}" />
+ 		 <input type="hidden" name="competition" th:value="${competitionId}" />
   		 <input type="submit" value="Submit">
     </form>
 
