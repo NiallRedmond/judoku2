@@ -19,15 +19,19 @@
  		   </ul>
 	 </div>
       	<h4>Add Competitor.</h4>
-    <form action="#" th:action="@{/competitions/${competition.id}}" th:object="${email}" method="post">
+    <form action="#"  th:action="@{/competitions/} + ${competition.id}" th:object="${email}" method="post">
     	
         <p>User email: <input type="text" th:field="*{text}" /></p>
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     </form>
       
     </div>
-     
+
+ 	         <div >
+                    <span> <a href="/" th:href="@{/competitionstart/} + ${competition.id}">Competition Start!</a></span>
+                </div>
 </body>
 </html>
 
-<!-- @{/order/details(id=${competition.id})} -->
+<!-- @{/order/details(id=${competition.id})}  "@{/mycontroller/{path}(path=${type})}">  th:action="@{/competitions/{id}(id=${competition.Id})}" -->		
+

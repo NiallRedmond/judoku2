@@ -9,14 +9,14 @@
     
 </head>
 <body>
-    <p th:text="'Match of ' + ${part1} + ' and ' + ${part2}"/>
+    <p th:text="'Match of ' + ${competitor1.name} + ' and ' + ${competitor2.name}"/>
 <p id="demo"></p>
 
 <table>
 
 	<tr>
 		<th>
-			<p th:text="${part1}"/>
+			<p th:text="${competitor1.name}"/>
 		</th>
 		<th>
 			<h1 id="time"><time >00:00:00</time></h1>
@@ -25,7 +25,7 @@
 			<button id="clear">clear</button>
 		</th>			
 		<th>
-			<p th:text="${part2}"/>
+			<p th:text="${competitor2.name}"/>
 		</th>
 	</tr>
 	<tr>
@@ -81,7 +81,12 @@
  	<!-- <form action="#" th:action="@{/competition/save}" th:object="${event}" method="post"> -->
  	   <form action="/competition/save" method="post">
     <div id="container"></div>
-    <input type="submit" value="Submit">
+    <select name="victor" >
+	     <option th:value="${competitor1.id}" th:text="${competitor1.name}" ></option>
+ 	  	 <option th:value="${competitor2.id}" th:text="${competitor2.name}" ></option>
+ 	 </select>
+ 		 <input type="hidden" name="loser" th:value="${competitor1.id} +'_'+${competitor2.id}" />
+  		 <input type="submit" value="Submit">
     </form>
 
 
@@ -91,12 +96,12 @@
     
     /*<![CDATA[*/
 
-    var player1 = /*[[${part1}]]*/ 'default';
-    console.log(player1);
-    var player2 = /*[[${part2}]]*/ 'default';
-    console.log(player2);
+    var player1 = /*[[${competitor1.name}]]*/ 'default';
+    var player2 = /*[[${competitor2.name}]]*/ 'default';
 
-	/*]]>*/
+    var player1Id = /*[[${competitor1.id}]]*/ 'default';
+    var player2Id = /*[[${competitor2.id}]]*/ 'default';
+
     
 
     var h1 = document.getElementsByTagName('h1')[0],
@@ -175,17 +180,17 @@ function addFields(type){
 		
 		var option = document.createElement("option");
 
-		option.value = player1;
+		option.value = player1Id;
 	
 		option.appendChild(document.createTextNode(player1));
 		select.appendChild(option);
 	
 		var option = document.createElement("option");
-		option.value= player2;
+		option.value= player2Id;
 		option.appendChild(document.createTextNode(player2));
 		select.appendChild(option);
 
-		 container.appendChild(select);
+		container.appendChild(select);
 		  
         
         container.appendChild(document.createTextNode("  Details(optional)"));

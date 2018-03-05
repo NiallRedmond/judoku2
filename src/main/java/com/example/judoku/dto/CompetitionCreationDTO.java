@@ -67,7 +67,7 @@ public class CompetitionCreationDTO {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "competition{" +
                 "name=" + name +
                 ", date='" + date + '\'' +
                 ", venue='" + venue + '\'' +

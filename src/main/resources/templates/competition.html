@@ -1,12 +1,41 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Competition</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 </head>
 <body>
-    <p th:text="'competition ' + ${message} + '!'" />
-    
-    
+
+                
+                
+                <div th:if="${not #lists.isEmpty(names)}">
+                
+     			<table>
+                 	<tr>
+                 		<th>Matches:</th>
+      					<th></th>
+      					<th></th>
+                 	</tr>
+                	<tr th:each="string,itrStat : ${names}">
+                		<td th:text="${string.name}"  ></td>
+                		<td th:utext="${itrStat.even}? '':'---->' " ></td>  
+         				<td th:utext="${itrStat.even}? '':${buttons[itrStat.index]} " ></td>  
+                	</tr>
+                	
+                
+                </table>
+                
+
+              
+                
+                
+                </div>
+                
 </body>
 </html>

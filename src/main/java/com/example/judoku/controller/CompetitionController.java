@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.annotation.SessionScope;
 
 import com.example.judoku.dto.CompetitionCreationDTO;
+import com.example.judoku.dto.Competitor;
 import com.example.judoku.dto.Email;
 import com.example.judoku.dto.UserRegistrationDto;
 import com.example.judoku.model.Competition;
@@ -46,6 +47,9 @@ public class CompetitionController {
 	
 	@Autowired
 	CompetitionRepository competitionRepository;
+	@Autowired
+	UserRepository userRepository;
+
 
 
     @Autowired
@@ -69,39 +73,53 @@ public class CompetitionController {
     }
     
     
-    @GetMapping("/printViewPage")
-    public String passParametersWithModelMap(ModelMap map) {
-        map.addAttribute("welcomeMessage", "welcome");
-        map.addAttribute("message", "Baeldung");
-        return "greeting";
-    }
+
     
-    @GetMapping("/competition")
-    public String competition(ModelMap map) {
+    @GetMapping("/competitionstart/{id}")
+    public String competition(@PathVariable(value = "id") Long competitionId, ModelMap map) {
+    	
     	List<Integer> matchNum = new ArrayList<Integer>();
-    	List<String> names = new ArrayList<String>();
+    	List<Competitor> names = new ArrayList<Competitor>();
     	List<String> buttons = new ArrayList<String>();
-    	names.add("Alex");
-    	names.add("Bill");
-  
-    	names.add("Conor");
-    	names.add("Daniel");
- 
-    	names.add("Evan");
-    	names.add("Fionn");
-    
-    	names.add("Graham");
-    	names.add("Harry");
+    	
+	    Competition comp = competitionRepository.findOne(competitionId);
+	    
+	    for (User user : comp.getCompetitors())
+	    {
+//	    	names.add(user.getFirstName());
+	    	Competitor competitor = new Competitor();
+	    	competitor.setId(user.getId());
+	    	competitor.setName(user.getFirstName() + " " + user.getLastName());
+	    	
+	    	names.add(competitor);
+	    }
+	    
+	    
+//    	names.add("Alex");
+//    	names.add("Bill");
+//  
+//    	names.add("Conor");
+//    	names.add("Daniel");
+// 
+//    	names.add("Evan");
+//    	names.add("Fionn");
+//    
+//    	names.add("Graham");
+//    	names.add("Harry");
+	    
+	    
     	int counter3 = 0;
     	int counter = 1;
     	for(int i=0; i<names.size(); i++)
     	{
     		if((counter%2==0))
     		{
-    			String name1 = names.get(i-1);
-    			String name2 = names.get(i);	
+    			String name1 = names.get(i-1).getName();
+    			String name2 = names.get(i).getName();
+    			String id1 = names.get(i-1).getId().toString();
+    			String id2 = names.get(i).getId().toString();
     			
-    			buttons.add("<a href=\"http://localhost:8080/competition/" + name1 + "-" + name2 + "\" >Match Start!</a>");
+    			buttons.add("<a href=\"http://localhost:8080/competition/" + name1 + "_" + id1 + "-" + name2 + "_" + id2 + "\" >Match Start!</a>");
         		matchNum.add(counter3);
         		counter3++;
     		}
@@ -122,7 +140,7 @@ public class CompetitionController {
         map.addAttribute("buttons",buttons);
        
         map.addAttribute("matchNum", matchNum);
-        return "greeting";
+        return "competition";
     }
     
 	@GetMapping("/competition/{competitors}")
@@ -131,11 +149,29 @@ public class CompetitionController {
 		String[] parts = competitors.split("-");
 		String part1 = parts[0]; 
 		String part2 = parts[1];
+		
+		System.out.println(part1);
+		System.out.println(part2);
+		String[] competitor1Parts = part1.split("_");
+		String competitor1Name = competitor1Parts[0];
+		String competitor1Id = competitor1Parts[1];		
+		Competitor competitor1 = new Competitor();
+		competitor1.setId(Long.parseLong(competitor1Id));
+		competitor1.setName(competitor1Name);
+		
+		String[] competitor2Parts = part2.split("_");
+		String competitor2Name = competitor2Parts[0];
+		String competitor2Id = competitor2Parts[1];		
+		Competitor competitor2 = new Competitor();
+		competitor2.setId(Long.parseLong(competitor2Id));
+		competitor2.setName(competitor2Name);
+				
+				
 		System.out.println("===========================================================");
 		System.out.println(principal.getName());
 		System.out.println("===========================================================");
-		map.addAttribute("part1", part1);
-		map.addAttribute("part2", part2);
+		map.addAttribute("competitor1", competitor1);
+		map.addAttribute("competitor2", competitor2);
 	    return "match";
 	}
 //	@PostMapping("/competition/save")
@@ -189,7 +225,7 @@ public class CompetitionController {
     	//System.out.println(model.get("type"));
      //   model.addAttribute("event", event2);
        
-        return "match2";
+        return "index";
     }
     
     
@@ -237,9 +273,22 @@ public class CompetitionController {
 	}
     
     @PostMapping("/competitions/{id}")
-    public String viewCompetitionAddCompetitor(@ModelAttribute Email email) {
+    public String viewCompetitionAddCompetitor(@PathVariable(value = "id") Long competitionId, ModelMap map, @ModelAttribute Email email) {
         
+	    Competition comp = competitionRepository.findOne(competitionId);
+
+	    map.addAttribute("competition", comp);	
+    	
     	System.out.println(email.getText());
+    	
+    	User user = userRepository.findByEmail(email.getText());
+    	
+    	
+    	
+    	comp.getCompetitors().add(user);
+    	
+    	competitionRepository.save(comp);
+    	
     	return "viewCompetition";
     }
     
