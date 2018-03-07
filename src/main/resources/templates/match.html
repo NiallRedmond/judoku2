@@ -81,6 +81,7 @@
  	<!-- <form action="#" th:action="@{/competition/save}" th:object="${event}" method="post"> -->
  	   <form action="/competition/save" method="post">
     <div id="container"></div>
+    Winner:
     <select name="victor" >
 	     <option th:value="${competitor1.id}" th:text="${competitor1.name}" ></option>
  	  	 <option th:value="${competitor2.id}" th:text="${competitor2.name}" ></option>
@@ -159,22 +160,28 @@ function addFields(type){
 	
 	count = count + 1;
 	
-	 document.getElementById("demo").innerHTML = player1;
+	
     var container = document.getElementById("container");
-
-    	container.appendChild(document.createTextNode("Type"));
+		
+    var div = document.createElement("div");
+	div.id = count;
+	container.appendChild(div);
+	
+	
+    
+    	div.appendChild(document.createTextNode("Type"));
         var input = document.createElement("input");
         input.type = "text";
         input.name ="eventType";
         input.value = type;
-        container.appendChild(input);
+        div.appendChild(input);
         
-        container.appendChild(document.createTextNode("  Timestamp ")); 
+        div.appendChild(document.createTextNode("  Timestamp ")); 
         var input = document.createElement("input");
         input.type = "text";
         input.name ="eventTimestamp";
         input.value = document.getElementById("time").textContent;
-        container.appendChild(input);
+        div.appendChild(input);
       
 		var select = document.createElement("select");
 		select.name= "eventPlayer";
@@ -191,18 +198,34 @@ function addFields(type){
 		option.appendChild(document.createTextNode(player2));
 		select.appendChild(option);
 
-		container.appendChild(select);
+		div.appendChild(select);
 		  
         
-        container.appendChild(document.createTextNode("  Details(optional)"));
+        div.appendChild(document.createTextNode("  Details(optional)"));
         var input = document.createElement("input");
         input.type = "text";
         input.name ="eventDescription";
         input.value = " ";
-        container.appendChild(input);
+        div.appendChild(input);
         
-        container.appendChild(document.createElement("br"));
+        var x = document.createElement("input");
+        var child = document.getElementById(count);
+        
+        
+        x.type ="button";
+        x.value ="X";
+        x.addEventListener('click', ()=>{
+            delete_row(container, child);
+        })
+        div.appendChild(x);
+        div.appendChild(document.createElement("br"));
 
+        
+    
+}
+function delete_row(container, child)
+{
+	container.removeChild(child);
 }
 
     </script>
