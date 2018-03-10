@@ -3,6 +3,8 @@ package com.example.judoku.dto;
 
 
 
+import java.time.LocalDateTime;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 
@@ -36,6 +38,9 @@ public class CompetitionCreationDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+
 
 	public String getDate() {
 		return date;

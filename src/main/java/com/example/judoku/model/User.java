@@ -21,6 +21,8 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    private String belt;
+    
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -83,7 +85,15 @@ public class User {
     
     
 
-    public Collection<Match> getMatches() {
+    public String getBelt() {
+		return belt;
+	}
+
+	public void setBelt(String belt) {
+		this.belt = belt;
+	}
+
+	public Collection<Match> getMatches() {
 		return matches;
 	}
 

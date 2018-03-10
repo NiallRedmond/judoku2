@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+   
+     	   <form action="/competition/search" method="post">
+    <div id="container"></div>
+    Winner:
+    <select name="year" >
+    <option value="0" th:text="select operator" ></option>
+    <option th:each="int : ${years}" th:value="${int}" th:text="${int}"></option>
+ 	 </select>
+
+  		 <input type="submit" value="Submit">
+    </form>
+    
+
+
+</body>
+</html>

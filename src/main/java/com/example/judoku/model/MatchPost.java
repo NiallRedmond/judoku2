@@ -10,11 +10,23 @@ public class MatchPost{
     private String eventDescription;
     private String eventPlayer;
     
+    
     private String victor;
     private String loser;
     private String date;
+    private String code;
     
     private String competition;
+
+    
+    
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public String getEventType() {
 		return eventType;

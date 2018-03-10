@@ -30,6 +30,7 @@ public class Match {
     private String victor;
     private String loser;
     private String date;
+    private String code;
 
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -65,6 +66,15 @@ public Match(String victor, String loser, String date, Collection<Event> events)
 }
 
 
+
+
+public String getCode() {
+	return code;
+}
+
+public void setCode(String code) {
+	this.code = code;
+}
 
 public Collection<Event> getEvents() {
 	return events;

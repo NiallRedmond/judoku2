@@ -1,5 +1,6 @@
 package com.example.judoku.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,8 @@ public class MainController {
 	
     @GetMapping("/")
     public String root() {
-    
+    	String date = LocalDateTime.now().toString();
+    	System.out.println(date);
         return "index";
     }
 
