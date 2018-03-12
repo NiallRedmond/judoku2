@@ -1,6 +1,7 @@
 package com.example.judoku.controller;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import com.example.judoku.dto.Competitor;
 import com.example.judoku.dto.Email;
 import com.example.judoku.dto.MatchGen;
 import com.example.judoku.dto.UserRegistrationDto;
+import com.example.judoku.dto.Year;
 import com.example.judoku.model.Competition;
 import com.example.judoku.model.Event;
 import com.example.judoku.model.Match;
@@ -360,6 +362,8 @@ public class CompetitionController {
 		if (result.hasErrors()) {
 			return "createCompetition";
 		}
+		
+
 
 		// userService.save(competitionDto);
 		System.out.println(competitionDto.toString());
@@ -411,14 +415,12 @@ public class CompetitionController {
 	@GetMapping("/competition/search")
 	public String compSearch(ModelMap map) {
 		List<Competition> competitions = competitionRepository.findAll();
-		int year = LocalDateTime.now().getYear();
-		int yearCounter = year;
+		int currentYear = LocalDateTime.now().getYear();
+		int yearCounter = currentYear;
 		ArrayList<Integer> years = new ArrayList<Integer>();
-
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-		
-		years.add(year);
+		ArrayList<String> links = new ArrayList<String>();
+	
+		years.add(currentYear);
 		while(yearCounter > 1960)
 		{
 			yearCounter--;
@@ -428,37 +430,106 @@ public class CompetitionController {
 		
 		for(int i = 0; i < competitions.size(); i++)
 		{
-			if(LocalDateTime.parse(competitions.get(i).getDate(), formatter).getYear() != year)
+			if(Integer.parseInt(competitions.get(i).getDate().substring(competitions.get(i).getDate().length() - 4)) == currentYear)
 			{
-				competitions.remove(i);
+				
+				
+				String link = "";
+
+				link = "<a href=\"http://localhost:8080/competition/" + competitions.get(i).getId()+ "\"> " + competitions.get(i).getName() + " " + competitions.get(i).getDate() + "</a>"; 
+				links.add(link);
+			}
+			else
+			{
+
 			}
 		}
 		
+		
 		map.addAttribute("years", years);
-		map.addAttribute("competitions", competitions);
+		map.addAttribute("links", links);
 		return "CompetitionSearch";
 				
 	}
+
+	@PostMapping("/competition/search")
+	public String compSearchPost(ModelMap map, @ModelAttribute Year year) {
+	List<Competition> competitions = competitionRepository.findAll();
+	int currentYear = LocalDateTime.now().getYear();
+	int yearCounter = currentYear;
+	ArrayList<Integer> years = new ArrayList<Integer>();
+	ArrayList<String> links = new ArrayList<String>();
+
+	years.add(currentYear);
+	while(yearCounter > 1960)
+	{
+		yearCounter--;
+		years.add(yearCounter);
+	}
+	
+	
+	for(int i = 0; i < competitions.size(); i++)
+	{
+		if(Integer.parseInt(competitions.get(i).getDate().substring(competitions.get(i).getDate().length() - 4)) == Integer.parseInt(year.getYear()))
+		{
+			
+			
+			String link = "";
+
+			link = "<a href=\"http://localhost:8080/competition/" + competitions.get(i).getId()+ "\"> " + competitions.get(i).getName() + " " + competitions.get(i).getDate() + "</a>"; 
+			links.add(link);
+		}
+		else
+		{
+
+		}
+	}
+	
+	
+	map.addAttribute("years", years);
+	map.addAttribute("links", links);
+	return "CompetitionSearch";
+			
+}
 
 
 
 	@PostMapping("/competitions/{id}")
 	public String viewCompetitionAddCompetitor(@PathVariable(value = "id") Long competitionId, ModelMap map,
-			@ModelAttribute Email email) {
-
+			@ModelAttribute Email email, Principal principal) {
+		String role = "Role_User";
 		Competition comp = competitionRepository.findOne(competitionId);
 
 		map.addAttribute("competition", comp);
 
 		System.out.println(email.getText());
+		
+		User user = userRepository.findByEmail(principal.getName());
+		for(Role r : user.getRoles())
+		{
+			if(r.getName().equalsIgnoreCase("Role_Admin"))
+			{
+				role = "Role_Admin";
+			}
+		}
 
-		User user = userRepository.findByEmail(email.getText());
+		User u = userRepository.findByEmail(email.getText());
 
-		comp.getCompetitors().add(user);
+		comp.getCompetitors().add(u);
 
 		competitionRepository.save(comp);
+		map.addAttribute("competition", comp);
+		map.addAttribute("email", email);
+		map.addAttribute("user", user);
+		map.addAttribute("role", role);
 
 		return "viewCompetition";
 	}
+	
+	
+
+
+	
+
 
 }

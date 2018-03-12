@@ -8,16 +8,30 @@
    
      	   <form action="/competition/search" method="post">
     <div id="container"></div>
-    Winner:
+    Select Year:
+    <div th:if="${years != null}">
+  
+
+
     <select name="year" >
-    <option value="0" th:text="select operator" ></option>
+  
     <option th:each="int : ${years}" th:value="${int}" th:text="${int}"></option>
  	 </select>
 
   		 <input type="submit" value="Submit">
+  		 </div>
+
     </form>
     
 
-
+<div th:if="${links != null}">
+  
+    <ul>
+       <li th:each="item : ${links}" th:utext="${item}"></li>
+    </ul>
+</div>
+<div th:unless="${links != null}">
+   <div >No competitions exist from selected year.</div>
+</div>
 </body>
 </html>
