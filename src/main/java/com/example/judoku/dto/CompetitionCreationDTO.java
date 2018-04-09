@@ -21,11 +21,6 @@ public class CompetitionCreationDTO {
     @NotEmpty
     private String venue;
 
-    @NotEmpty
-    private String password;
-
-
-
 
 
 
@@ -58,13 +53,6 @@ public class CompetitionCreationDTO {
 		this.venue = venue;
 	}
 
-	public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
 
 

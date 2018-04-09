@@ -1,7 +1,5 @@
 package com.example.judoku.model;
 
-
-
 import javax.persistence.*;
 
 import org.hibernate.annotations.LazyCollection;
@@ -14,49 +12,34 @@ import java.util.Collection;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class Competition {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    private String name;
-    private String date;
-    private String venue;
-    private String password;
-    private Boolean signUpOpen;
-    private Boolean completed;
-    private String gold;
-    private String silver;
-    private String bronze;
-    
+	private String name;
+	private String date;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "competitions_users",
-            joinColumns = @JoinColumn(
-                    name = "competiton_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"))
-    private Collection<User> competitors;
-    
-    @OneToMany(cascade = CascadeType.ALL)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(
-            name = "competitions_matches",
-            joinColumns = @JoinColumn(
-                    name = "competition_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "match_id", referencedColumnName = "id"))
-    private Collection<Match> matches;
-    
+	private Boolean completed;
+	private String gold;
+	private String silver;
+	private String bronze;
+
+	private String type;
+	private String belt;
+	private double weight;
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "competitions_users", joinColumns = @JoinColumn(name = "competiton_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	private Collection<User> competitors;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JoinTable(name = "competitions_matches", joinColumns = @JoinColumn(name = "competition_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "match_id", referencedColumnName = "id"))
+	private Collection<Match> matches;
 
 	public Competition() {
 		super();
 	}
-
-
-	
-	
-	
 
 	public Boolean getCompleted() {
 		return completed;
@@ -65,13 +48,12 @@ public class Competition {
 	public void setCompleted(Boolean completed) {
 		this.completed = completed;
 	}
-	
 
-	public void setCompletedTrue( ) {
+	public void setCompletedTrue() {
 		this.completed = true;
 	}
-	
-	public void setCompletedFalse( ) {
+
+	public void setCompletedFalse() {
 		this.completed = false;
 	}
 
@@ -99,14 +81,6 @@ public class Competition {
 		this.bronze = bronze;
 	}
 
-	public Boolean getSignUpOpen() {
-		return signUpOpen;
-	}
-
-	public void setSignUpOpen(Boolean signUpOpen) {
-		this.signUpOpen = signUpOpen;
-	}
-
 	public Collection<Match> getMatches() {
 		return matches;
 	}
@@ -131,46 +105,36 @@ public class Competition {
 		this.name = name;
 	}
 
+	public String getType() {
+		return type;
+	}
 
-	
+	public void setType(String type) {
+		this.type = type;
+	}
 
+	public String getBelt() {
+		return belt;
+	}
 
+	public void setBelt(String belt) {
+		this.belt = belt;
+	}
 
+	public double getWeight() {
+		return weight;
+	}
 
-
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
 
 	public String getDate() {
 		return date;
 	}
 
-
-
-
-
-
 	public void setDate(String date) {
 		this.date = date;
-	}
-
-
-
-
-
-
-	public String getVenue() {
-		return venue;
-	}
-
-	public void setVenue(String venue) {
-		this.venue = venue;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public Collection<User> getCompetitors() {
@@ -183,17 +147,8 @@ public class Competition {
 
 	@Override
 	public String toString() {
-		return "Competition [id=" + id + ", name=" + name + ", date=" + date + ", venue=" + venue + ", password="
-				+ password + ", competitors=" + competitors + "]";
+		return "Competition [id=" + id + ", name=" + name + ", date=" + date + ", , password=" + ", competitors="
+				+ competitors + "]";
 	}
 
-    
-
-
-    
-
-    
-    
-
-   
 }

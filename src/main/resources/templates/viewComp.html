@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<title>Competition</title>
+</head>
+<body>
+	<div>
+
+		<p th:text="'Name: ' + ${tournament.name}" />
+		<p th:text="'Date: ' + ${tournament.date}" />
+		<p th:text="'Venue: ' + ${tournament.Venue}" />
+		<p th:text="'Completed: ' + ${tournament.completed}" />
+		<p th:text="${role}" />
+
+		<div></div>
+		<div th:if="${role == 'Role_Admin'}">
+			<div th:if="${tournament.completed == false}">
+
+				<div th:if="${tournament.categories != null}">
+					<h3>Categories</h3>
+					<ul>
+						<li th:each="item : ${tournament.categories}" th:text="${item}"></li>
+					</ul>
+				</div>
+				<p th:utext="${button}"></p>
+
+
+
+				<div>
+
+				</div>
+			</div>
+		</div>
+
+			<div th:if="${tournament.signUpOpen == true}">
+
+			
+
+
+
+
+			</div>
+			
+
+
+
+
+
+
+
+
+
+
+
+	</div>
+
+</body>
+</html>
+

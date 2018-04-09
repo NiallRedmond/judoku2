@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.util.StringUtils;
 
 import com.example.judoku.dto.CompetitionCreationDTO;
 import com.example.judoku.dto.Competitor;
@@ -40,9 +42,11 @@ import com.example.judoku.model.Event;
 import com.example.judoku.model.Match;
 import com.example.judoku.model.MatchPost;
 import com.example.judoku.model.Role;
+import com.example.judoku.model.Tournament;
 import com.example.judoku.model.User;
 import com.example.judoku.repository.CompetitionRepository;
 import com.example.judoku.repository.EventRepository;
+import com.example.judoku.repository.TournamentRepository;
 import com.example.judoku.repository.UserRepository;
 
 import groovy.lang.Grab;
@@ -55,6 +59,8 @@ public class CompetitionController {
 
 	@Autowired
 	CompetitionRepository competitionRepository;
+	@Autowired
+	TournamentRepository tournamentRepository;
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
@@ -109,21 +115,20 @@ public class CompetitionController {
 		// matches.add(match);
 		// i = i + 2;
 		// }
-		
-		
+
 		Collection<Match> completedMatches = comp.getMatches();
 		System.out.println("AAAAAAAAAAAAAAA");
 		while (competitors.size() > 1 && newRound == true) {
 			int counter = 1;
-			code2 =1;
+			code2 = 1;
 			for (Competitor c : competitors) {
 				System.out.println(c.getName());
 			}
 
 			System.out.println("TESTESTESTEST");
-			
+
 			buttons.clear();
-			
+
 			for (int i = 0; i < competitors.size(); i++) {
 				if ((counter % 2 == 0)) {
 					completed = false;
@@ -144,14 +149,12 @@ public class CompetitionController {
 					}
 					String codeSend = Integer.toString(code) + Integer.toString(code2);
 					if (completed == false) {
-						buttons.add("<a href=\"http://localhost:8080/competition/" + competitionId + "/" + codeSend + "/" + name1 + "_"
-								+ id1 + "-" + name2 + "_" + id2 + "\" >Match Start!</a>");
+						buttons.add("<a href=\"http://localhost:8080/competition/" + competitionId + "/" + codeSend
+								+ "/" + name1 + "_" + id1 + "-" + name2 + "_" + id2 + "\" >Match Start!</a>");
 						newRound = false;
-					} else if(name1.equals("BYE")|| name2.equals("BYE")) {
+					} else if (name1.equals("BYE") || name2.equals("BYE")) {
 						buttons.add("<div id = \"completed\"></div>");
-					}
-					else
-					{
+					} else {
 						buttons.add("<div id = \"completed\">Match completed. Victor: " + victor + "  </div>");
 					}
 
@@ -161,14 +164,15 @@ public class CompetitionController {
 				code2++;
 				counter++;
 			}
-		
+
 			// System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBB");
 			if (newRound == true && competitors.size() > 1) {
 
 				for (Match m : completedMatches) {
 
 					for (int i = 0; i < competitors.size(); i++) {
-						if (m.getLoser().equals(competitors.get(i).getId().toString()) && String.valueOf(m.getCode().charAt(0)).equals(Integer.toString(code) )) {
+						if (m.getLoser().equals(competitors.get(i).getId().toString())
+								&& String.valueOf(m.getCode().charAt(0)).equals(Integer.toString(code))) {
 							competitors.remove(i);
 						}
 					}
@@ -177,38 +181,32 @@ public class CompetitionController {
 
 			}
 			code++;
-	}
+		}
 
-		if(competitors.size()==1)
-		{
+		if (competitors.size() == 1) {
 			buttons.add("testestest");
 			Match match = completedMatches.iterator().next();
 			for (Match m : completedMatches) {
-				if(Integer.parseInt(m.getCode()) > Integer.parseInt(match.getCode()) )
-				{
+				if (Integer.parseInt(m.getCode()) > Integer.parseInt(match.getCode())) {
 					match = m;
 				}
-				
+
 			}
 			comp.setGold(match.getVictor());
 			comp.setSilver(match.getLoser());
-			
+
 			comp.setCompletedTrue();
 			competitionRepository.save(comp);
-			
-			
-			
-		}
-		else
-		{
-		if ((competitors.size() & 1) == 0) {
-			// even...
+
 		} else {
-			// odd...
-			Competitor competitor = new Competitor();
-			competitor.setName("BYE");
-			competitors.add(competitor);
-		}
+			if ((competitors.size() & 1) == 0) {
+				// even...
+			} else {
+				// odd...
+				Competitor competitor = new Competitor();
+				competitor.setName("BYE");
+				competitors.add(competitor);
+			}
 
 		}
 		for (Competitor c : competitors) {
@@ -216,7 +214,7 @@ public class CompetitionController {
 		}
 
 		buttons.add(" ");
-		
+
 		map.addAttribute("welcomeMessage", "welcome");
 		map.addAttribute("names", competitors);
 
@@ -227,8 +225,9 @@ public class CompetitionController {
 	}
 
 	@GetMapping("/competition/{id}/{code}/{competitors}")
-	public String match(ModelMap map, @PathVariable(value = "id") Long competitionId, @PathVariable(value = "code") String code,
-			@PathVariable(value = "competitors") String competitors, Principal principal) {
+	public String match(ModelMap map, @PathVariable(value = "id") Long competitionId,
+			@PathVariable(value = "code") String code, @PathVariable(value = "competitors") String competitors,
+			Principal principal) {
 
 		String[] parts = competitors.split("-");
 		String part1 = parts[0];
@@ -260,7 +259,6 @@ public class CompetitionController {
 		return "match";
 	}
 
-
 	@PostMapping("/competition/save")
 	public String formPost(MatchPost matchPost, ModelMap model) {
 		String button;
@@ -271,7 +269,6 @@ public class CompetitionController {
 		if (parts[1].equals(matchPost.getVictor())) {
 			matchPost.setLoser(parts[0]);
 		}
-
 
 		System.out.println(model.toString());
 		System.out.println("=====================");
@@ -341,41 +338,40 @@ public class CompetitionController {
 		// System.out.println(model.get("type"));
 		// model.addAttribute("event", event2);
 
-//		buttons.add("<a href=\"http://localhost:8080/competition/" + competitionId + "/" + codeSend + "/" + name1 + "_"
-//				+ id1 + "-" + name2 + "_" + id2 + "\" >Match Start!</a>");
-		button = "<a href =\"http://localhost:8080/competitionstart/" + matchPost.getCompetition() + "\" >Return to competition</a>  ";
+		// buttons.add("<a href=\"http://localhost:8080/competition/" + competitionId +
+		// "/" + codeSend + "/" + name1 + "_"
+		// + id1 + "-" + name2 + "_" + id2 + "\" >Match Start!</a>");
+		button = "<a href =\"http://localhost:8080/competitionstart/" + matchPost.getCompetition()
+				+ "\" >Return to competition</a>  ";
 		model.addAttribute("button", button);
-		
+
 		return "matchsaved";
 	}
 
 	@GetMapping("/createCompetition")
 	public String competitonForm(Model model) {
-		model.addAttribute("competition", new Competition());
+		model.addAttribute("tournament", new Tournament());
 		return "createCompetition";
 	}
 
 	@PostMapping("/createCompetition")
-	public String createCompetition(@ModelAttribute("competition") @Valid CompetitionCreationDTO competitionDto,
+	public String createCompetition(@ModelAttribute("tournament") @Valid CompetitionCreationDTO competitionDto,
 			BindingResult result) {
-		competitionDto.setDate(LocalDateTime.now().toString());
+		boolean b = false;
 		if (result.hasErrors()) {
 			return "createCompetition";
 		}
-		
 
+		competitionDto.getDate().substring(competitionDto.getDate().length() - 2);
 
-		// userService.save(competitionDto);
-		System.out.println(competitionDto.toString());
-
-		Competition comp = new Competition();
+		Tournament comp = new Tournament();
 		comp.setName(competitionDto.getName());
 		comp.setDate(competitionDto.getDate());
-		comp.setVenue(competitionDto.getVenue());
-		comp.setPassword(passwordEncoder.encode(competitionDto.getPassword()));
-		comp.setCompletedFalse();
+	    comp.setVenue(competitionDto.getVenue());
+		comp.setCompleted(b);
+		//comp.setCompletedFalse();
 
-		competitionRepository.save(comp);
+		tournamentRepository.save(comp);
 
 		return "redirect:/createCompetition?success";
 
@@ -387,15 +383,12 @@ public class CompetitionController {
 		Email email = new Email();
 		String role = "Role_User";
 		User user = userRepository.findByEmail(principal.getName());
-		for(Role r : user.getRoles())
-		{
-			if(r.getName().equalsIgnoreCase("Role_Admin"))
-			{
+		for (Role r : user.getRoles()) {
+			if (r.getName().equalsIgnoreCase("Role_Admin")) {
 				role = "Role_Admin";
 			}
 		}
-		
-		
+
 		map.addAttribute("competition", comp);
 		map.addAttribute("email", email);
 		map.addAttribute("user", user);
@@ -403,6 +396,28 @@ public class CompetitionController {
 		return "viewCompetition";
 	}
 	
+	@GetMapping("/comp/{id}")
+	public String viewComp(@PathVariable(value = "id") Long tournamentId, ModelMap map, Principal principal) {
+		Tournament comp = tournamentRepository.findOne(tournamentId);
+		Email email = new Email();
+		String role = "Role_User";
+		User user = userRepository.findByEmail(principal.getName());
+		for (Role r : user.getRoles()) {
+			if (r.getName().equalsIgnoreCase("Role_Admin")) {
+				role = "Role_Admin";
+			}
+		}
+		
+		String button = "<a href=\"http://localhost:8080/addcategory/" + tournamentId + "\" >Add Category</a>";
+
+		map.addAttribute("button", button);
+		map.addAttribute("tournament", comp);
+		map.addAttribute("email", email);
+		map.addAttribute("user", user);
+		map.addAttribute("role", role);
+		return "viewComp";
+	}
+
 	@GetMapping("/competitionresult/{id}")
 	public String viewResults(@PathVariable(value = "id") Long competitionId, ModelMap map) {
 		Competition comp = competitionRepository.findOne(competitionId);
@@ -411,7 +426,7 @@ public class CompetitionController {
 		map.addAttribute("email", email);
 		return "competition2";
 	}
-	
+
 	@GetMapping("/competition/search")
 	public String compSearch(ModelMap map) {
 		List<Competition> competitions = competitionRepository.findAll();
@@ -419,99 +434,88 @@ public class CompetitionController {
 		int yearCounter = currentYear;
 		ArrayList<Integer> years = new ArrayList<Integer>();
 		ArrayList<String> links = new ArrayList<String>();
-	
+
 		years.add(currentYear);
-		while(yearCounter > 1960)
-		{
+		while (yearCounter > 1960) {
 			yearCounter--;
 			years.add(yearCounter);
 		}
-		
-		
-		for(int i = 0; i < competitions.size(); i++)
-		{
-			if(Integer.parseInt(competitions.get(i).getDate().substring(competitions.get(i).getDate().length() - 4)) == currentYear)
-			{
-				
-				
-				String link = "";
 
-				link = "<a href=\"http://localhost:8080/competition/" + competitions.get(i).getId()+ "\"> " + competitions.get(i).getName() + " " + competitions.get(i).getDate() + "</a>"; 
-				links.add(link);
-			}
-			else
-			{
+		for (int i = 0; i < competitions.size(); i++) {
+			if (isNumeric(StringUtils.substring(competitions.get(i).getDate(), 0, 4))) {
+				if (Integer.parseInt(StringUtils.substring(competitions.get(i).getDate(), 0, 4)) == currentYear) {
 
+					String link = "";
+
+					link = "<a href=\"http://localhost:8080/competition/" + competitions.get(i).getId() + "\"> "
+							+ competitions.get(i).getName() + " " + competitions.get(i).getDate() + "</a>";
+					links.add(link);
+				} else {
+
+				}
 			}
 		}
-		
-		
+
 		map.addAttribute("years", years);
 		map.addAttribute("links", links);
 		return "CompetitionSearch";
-				
+
 	}
 
 	@PostMapping("/competition/search")
 	public String compSearchPost(ModelMap map, @ModelAttribute Year year) {
-	List<Competition> competitions = competitionRepository.findAll();
-	int currentYear = LocalDateTime.now().getYear();
-	int yearCounter = currentYear;
-	ArrayList<Integer> years = new ArrayList<Integer>();
-	ArrayList<String> links = new ArrayList<String>();
+		List<Competition> competitions = competitionRepository.findAll();
+		int currentYear = LocalDateTime.now().getYear();
+		int yearCounter = currentYear;
+		ArrayList<Integer> years = new ArrayList<Integer>();
+		ArrayList<String> links = new ArrayList<String>();
 
-	years.add(currentYear);
-	while(yearCounter > 1960)
-	{
-		yearCounter--;
-		years.add(yearCounter);
-	}
-	
-	
-	for(int i = 0; i < competitions.size(); i++)
-	{
-		if(Integer.parseInt(competitions.get(i).getDate().substring(competitions.get(i).getDate().length() - 4)) == Integer.parseInt(year.getYear()))
-		{
-			
-			
-			String link = "";
-
-			link = "<a href=\"http://localhost:8080/competition/" + competitions.get(i).getId()+ "\"> " + competitions.get(i).getName() + " " + competitions.get(i).getDate() + "</a>"; 
-			links.add(link);
+		years.add(currentYear);
+		while (yearCounter > 1960) {
+			yearCounter--;
+			years.add(yearCounter);
 		}
-		else
-		{
 
+		for (int i = 0; i < competitions.size(); i++) {
+			if (isNumeric(StringUtils.substring(competitions.get(i).getDate(), 0, 4))) {
+				if (Integer.parseInt(StringUtils.substring(competitions.get(i).getDate(), 0, 4)) == Integer
+						.parseInt(year.getYear())) {
+
+					String link = "";
+
+					link = "<a href=\"http://localhost:8080/competition/" + competitions.get(i).getId() + "\"> "
+							+ competitions.get(i).getName() + " " + competitions.get(i).getDate() + "</a>";
+					links.add(link);
+				} else {
+
+				}
+			}
 		}
+
+		map.addAttribute("years", years);
+		map.addAttribute("links", links);
+		return "CompetitionSearch";
+
 	}
-	
-	
-	map.addAttribute("years", years);
-	map.addAttribute("links", links);
-	return "CompetitionSearch";
-			
-}
-
-
 
 	@PostMapping("/competitions/{id}")
 	public String viewCompetitionAddCompetitor(@PathVariable(value = "id") Long competitionId, ModelMap map,
 			@ModelAttribute Email email, Principal principal) {
 		String role = "Role_User";
 		Competition comp = competitionRepository.findOne(competitionId);
-
+		boolean signedUp = false;
 		map.addAttribute("competition", comp);
 
 		System.out.println(email.getText());
-		
+
 		User user = userRepository.findByEmail(principal.getName());
-		for(Role r : user.getRoles())
-		{
-			if(r.getName().equalsIgnoreCase("Role_Admin"))
-			{
+		for (Role r : user.getRoles()) {
+			if (r.getName().equalsIgnoreCase("Role_Admin")) {
 				role = "Role_Admin";
 			}
 		}
+
+		// for(User u:comp.get)
 
 		User u = userRepository.findByEmail(email.getText());
 
@@ -526,10 +530,51 @@ public class CompetitionController {
 		return "viewCompetition";
 	}
 	
+	@GetMapping("/addcategory/{id}")
+	public String addCategory(@PathVariable(value = "id") Long competitionId, ModelMap map, Principal principal) {
+		map.addAttribute("competition", new Competition());
+
+		map.addAttribute("id", competitionId);
+		return "addCategory";
+	}
+	
+	@PostMapping("/addcategory/{id}")
+	public String createCategory(@PathVariable(value = "id") Long Id, ModelMap map, @ModelAttribute("competition") @Valid CompetitionCreationDTO competitionDto,
+			BindingResult result) {
+		boolean b = false;
+//		if (result.hasErrors()) {
+//			return "createCompetition";
+//		}
+
+		//competitionDto.getDate().substring(competitionDto.getDate().length() - 2);
+	
+		Competition comp = new Competition();
+		comp.setName(competitionDto.getName());
+		//comp.setDate(competitionDto.getDate());
+		System.out.println(comp.getName());
+		comp.setCompleted(b);
+		//comp.setCompletedFalse();
+
+		//tournamentRepository.save(comp);
+
+		Tournament tour = tournamentRepository.findOne(Id);
+		map.addAttribute("competition", comp);
+		map.addAttribute("tournemant", tour);
+		//return "addCategory";
+		
+		return "redirect:/comp/" + Id;
+
+	}
+	
 	
 
-
-	
-
+	public static boolean isNumeric(String str) {
+		try {
+			double d = Double.parseDouble(str);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
+	}
 
 }

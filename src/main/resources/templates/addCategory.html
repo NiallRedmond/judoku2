@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Create Competition</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+
+</head>
+<body>
+
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+
+				<!--             <div th:if="${param.success}">
+                <div class="alert alert-info">
+                    You've successfully created the competition!
+                </div>
+            </div> -->
+
+				<h1>Competition creation</h1>
+				<form th:action="@{/addcategory/} + ${id}"
+					th:object="${competition}" method="post">
+
+
+					<p>
+						User email: <input type="text" th:field="*{name}" />
+					</p>
+					<p>
+						<select name="cars">
+							<option value="volvo">Volvo</option>
+							<option value="saab">Saab</option>
+							<option value="fiat">Fiat</option>
+							<option value="audi">Audi</option>
+						</select>
+					</p>
+					<p>
+						<input type="submit" value="Submit" /> <input type="reset"
+							value="Reset" />
+					</p>
+					<select id='combo'>
+			
+						<option value =1>Weight</option>
+						<option value =2>Kyu</option>
+					</select> <input id='text1' style='display: none' /> <input id='text2'
+						style='display: none' /> <input id='text3' style='display: none'></input>
+					
+
+					<div id="kyu" ></div>
+					<div id="weight"></div>
+
+
+					<div class="form-group">
+						<button type="submit" class="btn btn-success">Create</button>
+
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+document.getElementById('combo').onchange = function() {
+
+
+	
+	if(this.selectedIndex == 1)
+		{
+			kyu();
+		}
+	
+	if(this.selectedIndex == 2)
+		{
+			weight();
+		}
+	
+
+
+
+
+}
+
+function kyu()
+{
+	 var del = document.getElementById('weight');
+	 var div = document.getElementById('kyu');
+	 del.innerHTML = '';
+	 div.innerHTML = '';
+	 
+	
+	 var select = document.createElement("select");
+	 select.name= "belt";
+
+	 var option = document.createElement("option");
+
+	 option.value = "novice";
+
+	 option.appendChild(document.createTextNode("novice"));
+	 select.appendChild(option);
+	 //*
+	 var option = document.createElement("option");
+	 option.value= "lower kyu";
+	 option.appendChild(document.createTextNode("lower kyu"));
+	 select.appendChild(option);
+
+	 div.appendChild(select); 
+
+}
+
+function weight()
+{
+	 var del = document.getElementById('kyu');
+	 var div = document.getElementById('weight');
+	 del.innerHTML = '';
+	 div.innerHTML = '';
+	 
+	
+	 var select = document.createElement("select");
+	 select.name= "weight";
+
+	 var option = document.createElement("option");
+
+	 option.value = "60kg";
+
+	 option.appendChild(document.createTextNode("60kg"));
+	 select.appendChild(option);
+	 //*
+	 var option = document.createElement("option");
+	 option.value= "66kg";
+	 option.appendChild(document.createTextNode("66kg"));
+	 select.appendChild(option);
+
+	 div.appendChild(select); 
+
+}
+
+
+
+</script>
+</html>
+

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.annotation.SessionScope;
 
 import com.example.judoku.model.User;
+import com.example.judoku.repository.TournamentRepository;
 import com.example.judoku.repository.UserRepository;
 
 import groovy.lang.Grab;
@@ -24,13 +25,11 @@ public class MainController {
 
 	@Autowired
 	UserRepository userRepository;
-	
-	
+
 	
     @GetMapping("/")
     public String root() {
-    	String date = LocalDateTime.now().toString();
-    	System.out.println(date);
+
         return "index";
     }
 
