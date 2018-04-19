@@ -447,7 +447,7 @@ public class CompetitionController {
 
 					String link = "";
 
-					link = "<a href=\"http://localhost:8080/competition/" + competitions.get(i).getId() + "\"> "
+					link = "<a href=\"http://localhost:8080/comp/" + competitions.get(i).getId() + "\"> "
 							+ competitions.get(i).getName() + " " + competitions.get(i).getDate() + "</a>";
 					links.add(link);
 				} else {
@@ -464,34 +464,35 @@ public class CompetitionController {
 
 	@PostMapping("/competition/search")
 	public String compSearchPost(ModelMap map, @ModelAttribute Year year) {
-		List<Competition> competitions = competitionRepository.findAll();
+		List<Tournament> competitions = tournamentRepository.findAll();
 		int currentYear = LocalDateTime.now().getYear();
 		int yearCounter = currentYear;
-		ArrayList<Integer> years = new ArrayList<Integer>();
+		ArrayList<String> years = new ArrayList<String>();
 		ArrayList<String> links = new ArrayList<String>();
 
-		years.add(currentYear);
+		years.add(String.valueOf(currentYear));
 		while (yearCounter > 1960) {
 			yearCounter--;
-			years.add(yearCounter);
+			years.add(String.valueOf(yearCounter));
 		}
 
 		for (int i = 0; i < competitions.size(); i++) {
 			if (isNumeric(StringUtils.substring(competitions.get(i).getDate(), 0, 4))) {
-				if (Integer.parseInt(StringUtils.substring(competitions.get(i).getDate(), 0, 4)) == Integer
-						.parseInt(year.getYear())) {
-
+				if (Double.compare(Double.valueOf(StringUtils.substring(competitions.get(i).getDate(), 0, 4)), Double.valueOf(year.getYear()))==0) {
+	
 					String link = "";
 
-					link = "<a href=\"http://localhost:8080/competition/" + competitions.get(i).getId() + "\"> "
+					link = "<a href=\"http://localhost:8080/comp/" + competitions.get(i).getId() + "\"> "
 							+ competitions.get(i).getName() + " " + competitions.get(i).getDate() + "</a>";
 					links.add(link);
 				} else {
-
+					
 				}
 			}
 		}
 
+
+		
 		map.addAttribute("years", years);
 		map.addAttribute("links", links);
 		return "CompetitionSearch";

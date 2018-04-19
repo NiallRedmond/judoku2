@@ -56,8 +56,16 @@ public class UserServiceImpl implements UserService {
            userAdmin.setEmail("admin@email.com");
            userAdmin.setPassword(passwordEncoder.encode("admin"));
            userAdmin.setRoles(Arrays.asList(new Role("ROLE_Admin")));
-           
+                 
            userRepository.save(userAdmin);
+           
+   
+           
+           
+           
+           
+           
+           
         }
         User A = userRepository.findByEmail("A@email.com");
         if (A == null){

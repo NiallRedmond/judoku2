@@ -22,40 +22,23 @@
                 </div>
             </div> -->
 
-				<h1>Competition creation</h1>
+				<h2>Add Category</h2>
 				<form th:action="@{/addcategory/} + ${id}"
 					th:object="${competition}" method="post">
-
-
-					<p>
-						User email: <input type="text" th:field="*{name}" />
-					</p>
-					<p>
-						<select name="cars">
-							<option value="volvo">Volvo</option>
-							<option value="saab">Saab</option>
-							<option value="fiat">Fiat</option>
-							<option value="audi">Audi</option>
-						</select>
-					</p>
-					<p>
-						<input type="submit" value="Submit" /> <input type="reset"
-							value="Reset" />
-					</p>
-					<select id='combo'>
-			
-						<option value =1>Weight</option>
-						<option value =2>Kyu</option>
-					</select> <input id='text1' style='display: none' /> <input id='text2'
-						style='display: none' /> <input id='text3' style='display: none'></input>
+					<div class="radio disabled">
+						<label><input type="radio" name="rating" value=3 onclick="kyu();">kyu</label>
+					</div>
+					<div class="radio disabled">
+						<label><input type="radio" name="rating" value=4 onclick="weight();">weight</label>
+					</div>
 					
-
-					<div id="kyu" ></div>
-					<div id="weight"></div>
-
+					<div id="test"></div>
+				
 
 					<div class="form-group">
 						<button type="submit" class="btn btn-success">Create</button>
+
+
 
 					</div>
 
@@ -64,37 +47,26 @@
 		</div>
 	</div>
 </body>
-<script>
-document.getElementById('combo').onchange = function() {
-
-
-	
-	if(this.selectedIndex == 1)
-		{
-			kyu();
-		}
-	
-	if(this.selectedIndex == 2)
-		{
-			weight();
-		}
-	
+<script th:inline="javascript">
 
 
 
-
-}
 
 function kyu()
 {
-	 var del = document.getElementById('weight');
-	 var div = document.getElementById('kyu');
-	 del.innerHTML = '';
-	 div.innerHTML = '';
 	 
+	var div = document.getElementById('test');
 	
+	//As long as <ul> has a child node, remove it
+	 while (div.hasChildNodes()) {   
+	  div.removeChild(div.firstChild);
+	 }
+	// alert("Hello! I am an alert box!!");
+	 
+
+
 	 var select = document.createElement("select");
-	 select.name= "belt";
+	 select.name= "kyu";
 
 	 var option = document.createElement("option");
 
@@ -108,16 +80,22 @@ function kyu()
 	 option.appendChild(document.createTextNode("lower kyu"));
 	 select.appendChild(option);
 
-	 div.appendChild(select); 
+	 div.appendChild(select);  
+
 
 }
 
 function weight()
 {
-	 var del = document.getElementById('kyu');
-	 var div = document.getElementById('weight');
-	 del.innerHTML = '';
-	 div.innerHTML = '';
+	var div = document.getElementById('test');
+	 
+	//As long as <ul> has a child node, remove it
+	 while (div.hasChildNodes()) {   
+	  div.removeChild(div.firstChild);
+	 }
+	 
+	 
+
 	 
 	
 	 var select = document.createElement("select");
@@ -138,7 +116,6 @@ function weight()
 	 div.appendChild(select); 
 
 }
-
 
 
 </script>
