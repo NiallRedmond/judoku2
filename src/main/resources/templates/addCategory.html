@@ -24,16 +24,26 @@
 
 				<h2>Add Category</h2>
 				<form th:action="@{/addcategory/} + ${id}"
-					th:object="${competition}" method="post">
-					<div class="radio disabled">
-						<label><input type="radio" name="rating" value=3 onclick="kyu();">kyu</label>
+					th:object="${CategoryDTO}" method="post">
+					<div class="form-group"
+						th:classappend="${#fields.hasErrors('name')}? 'has-error':''">
+						<label for="name" class="control-label">Category name</label> <input
+							id="name" class="form-control" th:field="*{name}" />
+						<p class="error-message"
+							th:each="error: ${#fields.errors('name')}" th:text="${error}">Validation
+							error</p>
 					</div>
 					<div class="radio disabled">
-						<label><input type="radio" name="rating" value=4 onclick="weight();">weight</label>
+						<label><input type="radio" name="rating" value=3
+							onclick="kyu();">kyu</label>
 					</div>
-					
+					<div class="radio disabled">
+						<label><input type="radio" name="rating" value=4
+							onclick="weight();">weight</label>
+					</div>
+
 					<div id="test"></div>
-				
+
 
 					<div class="form-group">
 						<button type="submit" class="btn btn-success">Create</button>
@@ -89,7 +99,7 @@ function weight()
 {
 	var div = document.getElementById('test');
 	 
-	//As long as <ul> has a child node, remove it
+
 	 while (div.hasChildNodes()) {   
 	  div.removeChild(div.firstChild);
 	 }

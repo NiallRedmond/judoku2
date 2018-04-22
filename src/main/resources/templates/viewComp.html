@@ -23,7 +23,7 @@
 				<div th:if="${tournament.categories != null}">
 					<h3>Categories</h3>
 					<ul>
-						<li th:each="item : ${tournament.categories}" th:text="${item}"></li>
+						<li th:each="item : ${tournament.categories}" th:text="${item}"><a th:href="@{/competition/} + ${id}"" class="btn btn-info" role="button">Link Button</a></li>
 					</ul>
 				</div>
 				<p th:utext="${button}"></p>
@@ -45,7 +45,20 @@
 
 			</div>
 			
-
+     			<table>
+                 	<tr>
+                 		<th>Categories</th>
+      					<th></th>
+      					<th></th>
+                 	</tr>
+                	<tr th:each="string,itrStat : ${tournament.categories}">
+                		<td th:text="${string.name}"  ></td>
+                		<td ><a th:href="@{/competition/} + ${string.id}" class="btn btn-info" role="button">View</a></td>
+         			
+                	</tr>
+                	
+                
+                </table>
 
 
 

@@ -25,7 +25,8 @@ public class Competition {
 	private String bronze;
 
 	private String type;
-	private String belt;
+	private String kyu;
+
 	private double weight;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -113,12 +114,14 @@ public class Competition {
 		this.type = type;
 	}
 
-	public String getBelt() {
-		return belt;
+
+
+	public String getKyu() {
+		return kyu;
 	}
 
-	public void setBelt(String belt) {
-		this.belt = belt;
+	public void setKyu(String kyu) {
+		this.kyu = kyu;
 	}
 
 	public double getWeight() {

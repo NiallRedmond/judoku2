@@ -79,7 +79,7 @@
 <a href="#" id="filldetails" onclick="addFields()" class="btn btn-default">Add event</a>
  
  	<!-- <form action="#" th:action="@{/competition/save}" th:object="${event}" method="post"> -->
- 	   <form action="/competition/save" method="post">
+ 	   <form action="/competition/save" method="post" th:object="${Competition}">
     <div id="container"></div>
     Winner:
     <select name="victor" >

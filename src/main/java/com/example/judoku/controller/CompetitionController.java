@@ -31,6 +31,7 @@ import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
 
+import com.example.judoku.dto.CategoryDTO;
 import com.example.judoku.dto.CompetitionCreationDTO;
 import com.example.judoku.dto.Competitor;
 import com.example.judoku.dto.Email;
@@ -429,7 +430,7 @@ public class CompetitionController {
 
 	@GetMapping("/competition/search")
 	public String compSearch(ModelMap map) {
-		List<Competition> competitions = competitionRepository.findAll();
+		List<Tournament> competitions = tournamentRepository.findAll();
 		int currentYear = LocalDateTime.now().getYear();
 		int yearCounter = currentYear;
 		ArrayList<Integer> years = new ArrayList<Integer>();
@@ -533,35 +534,64 @@ public class CompetitionController {
 	
 	@GetMapping("/addcategory/{id}")
 	public String addCategory(@PathVariable(value = "id") Long competitionId, ModelMap map, Principal principal) {
-		map.addAttribute("competition", new Competition());
+		map.addAttribute("CategoryDTO", new CategoryDTO());
 
 		map.addAttribute("id", competitionId);
+		
 		return "addCategory";
 	}
 	
 	@PostMapping("/addcategory/{id}")
-	public String createCategory(@PathVariable(value = "id") Long Id, ModelMap map, @ModelAttribute("competition") @Valid CompetitionCreationDTO competitionDto,
+	public String createCategory(@PathVariable(value = "id") Long Id, ModelMap map, @ModelAttribute CategoryDTO dto,
 			BindingResult result) {
-		boolean b = false;
-//		if (result.hasErrors()) {
-//			return "createCompetition";
-//		}
 
-		//competitionDto.getDate().substring(competitionDto.getDate().length() - 2);
-	
-		Competition comp = new Competition();
-		comp.setName(competitionDto.getName());
-		//comp.setDate(competitionDto.getDate());
-		System.out.println(comp.getName());
-		comp.setCompleted(b);
-		//comp.setCompletedFalse();
+		
+		//Competition cat = competitionRepository.findOne(Id);
+		
+		System.out.println(dto.getName());
+		System.out.println(dto.getWeight());
+		System.out.println(dto.getKyu());
+		
+		Competition cat = new Competition();
+		
+		cat.setName(dto.getName());
+		
+		if(dto.getWeight() != null)
+		{
+			cat.setType("weight");
+			cat.setWeight(Double.parseDouble(dto.getWeight().substring(0, dto.getWeight().length() -2)));
+		}
+		if(dto.getKyu() != null)
+		{
+			cat.setType("kyu");
+			cat.setKyu(dto.getKyu());
+		}
+		
+		
+		
+/*		private Boolean completed;
+		private String gold;
+		private String silver;
+		private String bronze;
 
-		//tournamentRepository.save(comp);
-
+		private String type;
+		private String belt;
+		private double weight;*/
+		
+		cat.setCompletedFalse();
+		
+		
+		
 		Tournament tour = tournamentRepository.findOne(Id);
-		map.addAttribute("competition", comp);
-		map.addAttribute("tournemant", tour);
-		//return "addCategory";
+		
+		Collection<Competition> categories = tour.getCategories();
+		categories.add(cat);
+		tour.setCategories(categories);
+		
+		competitionRepository.save(cat);
+		tournamentRepository.save(tour);
+
+
 		
 		return "redirect:/comp/" + Id;
 
