@@ -13,60 +13,69 @@
 		<p th:text="'Name: ' + ${tournament.name}" />
 		<p th:text="'Date: ' + ${tournament.date}" />
 		<p th:text="'Venue: ' + ${tournament.Venue}" />
+
 		<p th:text="'Completed: ' + ${tournament.completed}" />
 		<p th:text="${role}" />
 
-		<div></div>
+		<div th:if="${tournament.signUpOpen == true}">
+			<a th:href="@{/signup/} + ${id}" class="btn btn-info" role="button">Sign
+				up!</a>
+		</div>
+
+
+
+
+
+
 		<div th:if="${role == 'Role_Admin'}">
+			<div th:if="${tournament.signUpOpen == false}">
+				<span> <a href="/"
+					th:href="@{/admin/opensignup/} + ${tournament.id}">Open Sign Up</a></span>
+			</div>
+			<div th:if="${tournament.signUpOpen == true}">
+				<span> <a href="/"
+					th:href="@{/admin/closesignup/} + ${tournament.id}">Close Sign
+						Up</a></span>
+			</div>
+			<div >
+				<span> <a href="/"
+					th:href="@{/admin/weighin/} + ${tournament.id}">Weigh in</a></span>
+			</div>
 			<div th:if="${tournament.completed == false}">
 
-				<div th:if="${tournament.categories != null}">
+<!-- 				<div th:if="${tournament.categories != null}">
 					<h3>Categories</h3>
 					<ul>
-						<li th:each="item : ${tournament.categories}" th:text="${item}"><a th:href="@{/competition/} + ${id}"" class="btn btn-info" role="button">Link Button</a></li>
+						<li th:each="item : ${tournament.categories}" th:text="${item}"><a
+							th:href="@{/competition/} + ${id} " class="btn btn-info"
+							role="button">Link Button</a></li>
 					</ul>
-				</div>
+				</div> -->
 				<p th:utext="${button}"></p>
 
 
 
-				<div>
-
-				</div>
+				<div></div>
 			</div>
 		</div>
 
-			<div th:if="${tournament.signUpOpen == true}">
+		<div th:if="${tournament.signUpOpen == true}"></div>
 
-			
+		<table>
+			<tr>
+				<th>Categories</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr th:each="string,itrStat : ${tournament.categories}">
+				<td th:text="${string.name}"></td>
+				<td><a th:href="@{/competition/} + ${string.id}"
+					class="btn btn-info" role="button">View</a></td>
 
-
-
-
-			</div>
-			
-     			<table>
-                 	<tr>
-                 		<th>Categories</th>
-      					<th></th>
-      					<th></th>
-                 	</tr>
-                	<tr th:each="string,itrStat : ${tournament.categories}">
-                		<td th:text="${string.name}"  ></td>
-                		<td ><a th:href="@{/competition/} + ${string.id}" class="btn btn-info" role="button">View</a></td>
-         			
-                	</tr>
-                	
-                
-                </table>
+			</tr>
 
 
-
-
-
-
-
-
+		</table>
 
 
 	</div>

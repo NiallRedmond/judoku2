@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Weigh in</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+</head>
+<body>
+
+
+
+	<p th:text="'Name: ' + ${User.firstName} + ' ' + ${User.lastName}" />
+
+	<div class="container">
+		<h2>Weigh in</h2>
+
+		<form th:action="@{/weighinuser}" th:object="${WeightDto}"
+			method="post">
+
+
+			<div class="form-group"
+				th:classappend="${#fields.hasErrors('userWeight')}? 'has-error':''">
+				<label for="userWeight" class="control-label">Weight: </label> <input
+					id="userWeight" class="form-control" type=number th:field="*{userWeight}" />
+
+			</div>
+
+			<div class="checkbox">
+				<label><input type="checkbox" value="yes" th:field="*{weight}">Weight
+					Category</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="yes" th:field="*{kyu}">Kyu
+					Category</label>
+			</div>
+				<input type="hidden" name="userId" th:value="${User.id}" />
+				<input type="hidden" name="tourId" th:value="${competition.id}" />
+				
+				
+		<div class="form-group">
+			<button type="submit" class="btn btn-success">Create</button>
+
+		</div>
+		</form>
+	</div>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

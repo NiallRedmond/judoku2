@@ -37,6 +37,7 @@ import com.example.judoku.dto.Competitor;
 import com.example.judoku.dto.Email;
 import com.example.judoku.dto.MatchGen;
 import com.example.judoku.dto.UserRegistrationDto;
+import com.example.judoku.dto.WeightDto;
 import com.example.judoku.dto.Year;
 import com.example.judoku.model.Competition;
 import com.example.judoku.model.Event;
@@ -118,6 +119,7 @@ public class CompetitionController {
 		// }
 
 		Collection<Match> completedMatches = comp.getMatches();
+		
 		System.out.println("AAAAAAAAAAAAAAA");
 		while (competitors.size() > 1 && newRound == true) {
 			int counter = 1;
@@ -131,7 +133,7 @@ public class CompetitionController {
 			buttons.clear();
 
 			for (int i = 0; i < competitors.size(); i++) {
-				if ((counter % 2 == 0)) {
+				if ((counter % 2 == 0)) {//for every second user
 					completed = false;
 					System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBB");
 					String name1 = competitors.get(i - 1).getName();
@@ -139,7 +141,7 @@ public class CompetitionController {
 					String id1 = competitors.get(i - 1).getId().toString();
 					String id2 = competitors.get(i).getId().toString();
 
-					for (Match m : completedMatches) {
+					for (Match m : completedMatches) {//check if match exists
 						if (m.getVictor().equals(id1) && m.getLoser().equals(id2)
 								|| m.getVictor().equals(id2) && m.getLoser().equals(id1)) {
 							User user = userRepository.findOne(Long.parseLong(m.getVictor()));
@@ -358,17 +360,55 @@ public class CompetitionController {
 	@PostMapping("/createCompetition")
 	public String createCompetition(@ModelAttribute("tournament") @Valid CompetitionCreationDTO competitionDto,
 			BindingResult result) {
-		boolean b = false;
+		boolean b = true;
 		if (result.hasErrors()) {
 			return "createCompetition";
 		}
+		
+		
+		
+		
+		
 
 		competitionDto.getDate().substring(competitionDto.getDate().length() - 2);
 
 		Tournament comp = new Tournament();
+		
+		ArrayList<User> u = new ArrayList<User>();
+		
+		//Collection<User> users = comp.getCompetitors();
+		
+		for(Integer i = 2; i<10; i++)
+		{
+	
+			User user = userRepository.findOne(i.longValue());
+			System.out.println(user.getFirstName());
+			u.add(user);
+			
+			
+		}
+		
+		Collection<User> users = u;
+		
+		comp.setCompetitors(users);
+		
+		comp.setCompetitors(users);
+		//test data
+/*		users.add(userRepository.findOne(Long.parseLong("2")));
+		users.add(userRepository.findOne(Long.parseLong("3")));
+		users.add(userRepository.findOne(Long.parseLong("4")));
+		users.add(userRepository.findOne(Long.parseLong("5")));
+		users.add(userRepository.findOne(Long.parseLong("6")));
+		users.add(userRepository.findOne(Long.parseLong("7")));
+		users.add(userRepository.findOne(Long.parseLong("8")));
+		users.add(userRepository.findOne(Long.parseLong("9")));*/
+		
+		
 		comp.setName(competitionDto.getName());
 		comp.setDate(competitionDto.getDate());
 	    comp.setVenue(competitionDto.getVenue());
+	    comp.setSignUpOpen(b);
+	    b = false;
 		comp.setCompleted(b);
 		//comp.setCompletedFalse();
 
@@ -533,7 +573,7 @@ public class CompetitionController {
 	}
 	
 	@GetMapping("/addcategory/{id}")
-	public String addCategory(@PathVariable(value = "id") Long competitionId, ModelMap map, Principal principal) {
+	public String addCategory(@PathVariable(value = "id") Long competitionId, ModelMap map) {
 		map.addAttribute("CategoryDTO", new CategoryDTO());
 
 		map.addAttribute("id", competitionId);
@@ -558,11 +598,21 @@ public class CompetitionController {
 		
 		if(dto.getWeight() != null)
 		{
+			if(dto.getName() == null || dto.getName().equals(""))
+			{
+			cat.setName("Under " + dto.getWeight());
+			}
+			
 			cat.setType("weight");
 			cat.setWeight(Double.parseDouble(dto.getWeight().substring(0, dto.getWeight().length() -2)));
 		}
 		if(dto.getKyu() != null)
 		{
+			if(dto.getName() == null || dto.getName().equals(""))
+			{
+			cat.setName(dto.getKyu());
+			}
+			
 			cat.setType("kyu");
 			cat.setKyu(dto.getKyu());
 		}
@@ -597,7 +647,244 @@ public class CompetitionController {
 
 	}
 	
+	@GetMapping("/signup/{id}")
+	public String signUp(@PathVariable(value = "id") Long Id, Principal principal, ModelMap map) {
+		String result ="";
+		Tournament comp = tournamentRepository.findOne(Id);
+		User user = userRepository.findByEmail(principal.getName());
+		
+		
+		
+		
+		if(comp.getSignUpOpen())
+		{
+			Collection<User> users = comp.getCompetitors();
+			users.add(user);
+			comp.setCompetitors(users);
+			result = "User successfully signed up";
+		}
+		else
+		{
+			result = "Sign up unsuccessful";
+		}
+		
+		tournamentRepository.save(comp);
+		
+		
+		String button = "<a href =\"http://localhost:8080/comp/" + Id + "\" >Return to competition</a>  ";
+		
+		
 	
+		map.addAttribute("result", result);
+		map.addAttribute("button", button);
+		
+		
+		return "signup";
+	}
+	
+	@PostMapping("/weighinuser")
+	public String createCategory(ModelMap map, @ModelAttribute WeightDto dto,
+			BindingResult result) {
+		User user = userRepository.findOne(dto.getUserId());
+		
+		boolean success = false;
+		double weight = 60;
+		System.out.println(dto.getUserId());
+		System.out.println(dto.getUserWeight());
+		System.out.println(dto.getWeight());
+		System.out.println(dto.getKyu());
+		System.out.println(dto.getUserId());
+		
+		Tournament comp = tournamentRepository.findOne(dto.getTourId());
+		
+		
+		if(dto.getWeight().equals("yes"))
+		{
+		
+		while(success == false)
+		{
+		if(dto.getUserWeight() < weight)
+		{
+			
+			Collection<Competition> categories = comp.getCategories();
+			boolean found = false;
+			for(Competition cat : categories)
+			{
+				if(cat.getWeight() == weight)
+				{
+					found = true;
+					success = true;
+
+					Collection<User> users = cat.getCompetitors();
+					boolean dup = false;
+					for(User u : users)
+					{
+						if(u.getId() == user.getId())
+						{
+							dup = true;
+						}
+					}
+					
+					if(dup == false)
+					{
+					users.add(user);
+					cat.setCompetitors(users);
+					competitionRepository.save(cat);
+					}
+					
+				}
+			}
+	
+			if(found == false)
+			{
+				Competition cat = new Competition();
+				
+				cat.setWeight(weight);
+				cat.setName("Under " + weight);
+				competitionRepository.save(cat);
+			//	cat = competitionRepository.
+	
+				Collection<User> users = new ArrayList<User>();
+				
+				
+
+	//			Collection<User> users = cat.getCompetitors();
+
+				users.add(user);
+				cat.setCompetitors(users);
+				
+				
+				//Tournament tour = tournamentRepository.findOne(Id);
+				
+/*				Collection<Competition> categories = tour.getCategories();
+				categories.add(cat);
+				tour.setCategories(categories);*/
+				
+				categories.add(cat);
+				comp.setCategories(categories);
+				competitionRepository.save(cat);
+				tournamentRepository.save(comp);
+				success = true;
+			}
+			
+		
+
+			
+			
+			
+		}
+		
+			weight = weight(weight);
+		}
+		}
+		
+/*		if(dto.getKyu().equals("yes"))
+		{
+		
+		while(success == false)
+		{
+		if(dto.getUserWeight() < weight)
+		{
+			
+			Collection<Competition> categories = comp.getCategories();
+			boolean found = false;
+			for(Competition cat : categories)
+			{
+				if(cat.getWeight() == weight)
+				{
+					found = true;
+					success = true;
+
+					Collection<User> users = cat.getCompetitors();
+					users.add(user);
+					cat.setCompetitors(users);
+					competitionRepository.save(cat);
+					
+					
+				}
+			}
+	
+			if(found == false)
+			{
+				Competition cat = new Competition();
+				Boolean b = false;
+				cat.setCompleted(b);
+				cat.setWeight(weight);
+				cat.setName("Under " + weight);
+				competitionRepository.save(cat);
+			//	cat = competitionRepository.
+	
+				Collection<User> users = new ArrayList<User>();
+				
+				
+
+	//			Collection<User> users = cat.getCompetitors();
+
+				users.add(user);
+				cat.setCompetitors(users);
+				
+				
+				//Tournament tour = tournamentRepository.findOne(Id);
+				
+				Collection<Competition> categories = tour.getCategories();
+				categories.add(cat);
+				tour.setCategories(categories);
+				
+				categories.add(cat);
+				comp.setCategories(categories);
+				competitionRepository.save(cat);
+				tournamentRepository.save(comp);
+				success = true;
+			}
+			
+		
+
+			
+			
+			
+		}
+		
+			weight = weight(weight);
+		}
+		}*/
+		
+	
+/*		-60 -66 -73 -81 -90 -100 +100
+		Lower Kyu Middle Kyu Upper Kyu*/
+		
+		
+		
+		return "redirect:/" ;
+
+	}
+	
+	
+	public Double weight(Double weight)
+	{
+		if(weight == 60.0)
+		{
+			return 66.0;
+		}
+		if(weight == 66.0)
+		{
+			return 73.0;
+		}
+		if(weight == 73.0)
+		{
+			return 81.0;
+		}
+		if(weight == 81.0)
+		{
+			return 90.0;
+		}
+		if(weight == 90.0)
+		{
+			return 100.0;
+		}
+		return weight;
+	}
+	
+
 
 	public static boolean isNumeric(String str) {
 		try {

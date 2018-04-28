@@ -70,6 +70,7 @@ public class UserServiceImpl implements UserService {
         User A = userRepository.findByEmail("A@email.com");
         if (A == null){
            A = new User();
+           A.setBelt("White");
            A.setFirstName("A");
            A.setLastName("");
            A.setEmail("A@email.com");
@@ -81,6 +82,7 @@ public class UserServiceImpl implements UserService {
         User B = userRepository.findByEmail("B@email.com");
         if (B == null){
            B = new User();
+           B.setBelt("White");
            B.setFirstName("B");
            B.setLastName("");
            B.setEmail("B@email.com");
@@ -91,7 +93,9 @@ public class UserServiceImpl implements UserService {
         }
         User C = userRepository.findByEmail("C@email.com");
         if (C == null){
+           
            C = new User();
+           C.setBelt("White");
            C.setFirstName("C");
            C.setLastName("");
            C.setEmail("C@email.com");
@@ -103,6 +107,7 @@ public class UserServiceImpl implements UserService {
         User D = userRepository.findByEmail("D@email.com");
         if (D == null){
            D = new User();
+           C.setBelt("White");
            D.setFirstName("D");
            D.setLastName("");
            D.setEmail("D@email.com");
@@ -115,6 +120,7 @@ public class UserServiceImpl implements UserService {
         User E = userRepository.findByEmail("E@email.com");
         if (E == null){
            E = new User();
+           E.setBelt("Blue");
            E.setFirstName("E");
            E.setLastName("");
            E.setEmail("E@email.com");
@@ -126,6 +132,7 @@ public class UserServiceImpl implements UserService {
         User F = userRepository.findByEmail("F@email.com");
         if (F == null){
            F = new User();
+           F.setBelt("Blue");
            F.setFirstName("F");
            F.setLastName("");
            F.setEmail("F@email.com");
@@ -137,6 +144,7 @@ public class UserServiceImpl implements UserService {
         User G = userRepository.findByEmail("G@email.com");
         if (G == null){
            G = new User();
+           G.setBelt("Blue");
            G.setFirstName("G");
            G.setLastName("");
            G.setEmail("G@email.com");
@@ -148,6 +156,7 @@ public class UserServiceImpl implements UserService {
         User H = userRepository.findByEmail("H@email.com");
         if (H == null){
            H = new User();
+           H.setBelt("Blue");
            H.setFirstName("H");
            H.setLastName("");
            H.setEmail("H@email.com");
