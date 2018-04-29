@@ -698,7 +698,7 @@ public class CompetitionController {
 		Tournament comp = tournamentRepository.findOne(dto.getTourId());
 		
 		
-		if(dto.getWeight().equals("yes"))
+		if(dto.getWeight() != null)
 		{
 		
 		while(success == false)
@@ -728,7 +728,9 @@ public class CompetitionController {
 					if(dup == false)
 					{
 					users.add(user);
-					cat.setCompetitors(users);
+					boolean b = false;
+					cat.setCompletedFalse();
+			
 					competitionRepository.save(cat);
 					}
 					
@@ -742,24 +744,16 @@ public class CompetitionController {
 				cat.setWeight(weight);
 				cat.setName("Under " + weight);
 				competitionRepository.save(cat);
-			//	cat = competitionRepository.
+	
 	
 				Collection<User> users = new ArrayList<User>();
 				
-				
-
-	//			Collection<User> users = cat.getCompetitors();
 
 				users.add(user);
 				cat.setCompetitors(users);
 				
-				
-				//Tournament tour = tournamentRepository.findOne(Id);
-				
-/*				Collection<Competition> categories = tour.getCategories();
-				categories.add(cat);
-				tour.setCategories(categories);*/
-				
+				cat.setCompletedFalse();
+
 				categories.add(cat);
 				comp.setCategories(categories);
 				competitionRepository.save(cat);
@@ -778,75 +772,100 @@ public class CompetitionController {
 		}
 		}
 		
-/*		if(dto.getKyu().equals("yes"))
+		if(dto.getKyu() != null)
 		{
 		
+			String kyu = "";
+		if(user.getBelt().equals("White") || user.getBelt().equals("Yellow"))
+		{
+			kyu = "Lower Kyu";
+		}
+		if(user.getBelt().equals("Green") || user.getBelt().equals("Blue"))
+		{
+			kyu = "Middle Kyu";
+		}
+		if(user.getBelt().equals("Brown") || user.getBelt().equals("Black"))
+		{
+			kyu = "Upper Kyu";
+		}
+			
+			
+			
+		success = false;
 		while(success == false)
 		{
-		if(dto.getUserWeight() < weight)
-		{
-			
+			boolean found =  false;
 			Collection<Competition> categories = comp.getCategories();
-			boolean found = false;
+			
 			for(Competition cat : categories)
 			{
-				if(cat.getWeight() == weight)
+				if(cat.getKyu() != null)
 				{
-					found = true;
-					success = true;
+				
+				if(cat.getKyu().equals(kyu))
+					{
+						found = true;
+						
+					
+						success = true;
 
-					Collection<User> users = cat.getCompetitors();
-					users.add(user);
-					cat.setCompetitors(users);
-					competitionRepository.save(cat);
-					
-					
+						Collection<User> users = cat.getCompetitors();
+						boolean dup = false;
+						for(User u : users)
+						{
+							if(u.getId() == user.getId())
+							{
+								dup = true;
+							}
+						}
+						
+						if(dup == false)
+						{
+						users.add(user);
+						boolean b = false;
+						cat.setCompletedFalse();
+				
+						competitionRepository.save(cat);
+						}
+						
+						
+					}
+				
 				}
+				
+				
 			}
-	
+			
+			
 			if(found == false)
 			{
 				Competition cat = new Competition();
 				Boolean b = false;
 				cat.setCompleted(b);
-				cat.setWeight(weight);
-				cat.setName("Under " + weight);
+				cat.setKyu(kyu);
+				cat.setName(kyu);
 				competitionRepository.save(cat);
-			//	cat = competitionRepository.
+
 	
 				Collection<User> users = new ArrayList<User>();
 				
-				
-
-	//			Collection<User> users = cat.getCompetitors();
 
 				users.add(user);
 				cat.setCompetitors(users);
 				
-				
-				//Tournament tour = tournamentRepository.findOne(Id);
-				
-				Collection<Competition> categories = tour.getCategories();
-				categories.add(cat);
-				tour.setCategories(categories);
-				
+				cat.setCompletedFalse();
+
 				categories.add(cat);
 				comp.setCategories(categories);
 				competitionRepository.save(cat);
 				tournamentRepository.save(comp);
 				success = true;
-			}
-			
-		
-
-			
-			
+			}		
 			
 		}
 		
-			weight = weight(weight);
 		}
-		}*/
+		
 		
 	
 /*		-60 -66 -73 -81 -90 -100 +100
@@ -854,8 +873,7 @@ public class CompetitionController {
 		
 		
 		
-		return "redirect:/" ;
-
+		return "redirect:/admin/weighin/" + dto.getTourId();
 	}
 	
 	

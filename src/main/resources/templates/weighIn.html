@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Competition</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta charset="utf-8"/>
+    <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <style>
 * {
   box-sizing: border-box;
@@ -49,49 +49,60 @@
 </head>
 <body>
 
-         <div>Match saved.</div>
+    <div class="navbar navbar-default" role="navigation" id="topnavbar">
+      <div class="container">
+        <div class="navbar-header">
+     
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        
 
-                
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="/"><span class="glyphicon glyphicon-home"></span> Profile</a>
+            </li>
+      
+      		 <li>
+              <a href="/competition"> <span class="glyphicon glyphicon-star"></span>Competitions</a>
+            </li>
+          </ul>
+          
+          <ul class="nav navbar-nav navbar-right">
+                <li>
+                   <a href="/logout">
+                        <span class="glyphicon glyphicon-user"></span>&nbsp;
+                        <strong>Log out</strong>
+                      
+                    </a>
+     
+                </li>
+            </ul>
 
-             
-                
-		<div th:utext="${button}"> </div>
-		
-		                <div th:if="${not #lists.isEmpty(names)}">
-                
-     			<table>
-                 	<tr>
-                 		<th>Matches:</th>
-      					<th></th>
-      					<th></th>
-                 	</tr>
-                	<tr th:each="string,itrStat : ${names}">
-                		<td th:text="${string.name}"  ></td>
-                		<td th:utext="${itrStat.even}? '':'---->' " ></td>  
-         				<td th:utext="${itrStat.even}? '':${buttons[itrStat.index]} " ></td>  
-                	</tr>
-                	
-                
-                </table>
-                
+        </div>
+      </div>
+    </div>
+
 
               
-                
-                
+<h2>Weigh In</h2>
+
+
+                <div >
+                    <span> <a href="/" th:href="@{/comp/} + ${competition.id}">Return to competition</a></span>
                 </div>
-                
-                
-                
-              
-<h2>My Phonebook</h2>
+
 
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
 
+
+
+
 <ul id="myUL" th:each="item,itrStat : ${competitors}">
-
-
-
- 
 
 <!-- IF -->
 <li th:if="${item.message == null}">
@@ -101,9 +112,6 @@
 <li th:unless="${item.message == null}">
     <a th:href="@{/admin/weighin/} + ${competition.id} + '/' + ${item.userId}" th:text="${item.userName} + ${item.message}"></a>
 </li>
-
-
-
 
 </ul>
 

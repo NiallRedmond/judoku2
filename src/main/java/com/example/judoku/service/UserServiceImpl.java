@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
            userAdmin = new User();
            userAdmin.setFirstName("Admin");
            userAdmin.setLastName("");
+           userAdmin.setBelt("Black");
            userAdmin.setEmail("admin@email.com");
            userAdmin.setPassword(passwordEncoder.encode("admin"));
            userAdmin.setRoles(Arrays.asList(new Role("ROLE_Admin")));

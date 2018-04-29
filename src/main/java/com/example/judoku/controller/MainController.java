@@ -1,5 +1,6 @@
 package com.example.judoku.controller;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,9 +29,11 @@ public class MainController {
 
 	
     @GetMapping("/")
-    public String root() {
-
-        return "index";
+    public String root(ModelMap map, Principal principal) {
+    	User user = userRepository.findByEmail(principal.getName());
+       
+    	map.addAttribute("User",user);
+    	return "index";
     }
     
     

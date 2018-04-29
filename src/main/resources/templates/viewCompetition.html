@@ -2,20 +2,107 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 
-<link rel="stylesheet" type="text/css"
-	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 <title>Competition</title>
+    <style>
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myUL {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#myUL li a {
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  display: block
+}
+
+#myUL li a:hover:not(.header) {
+  background-color: #eee;
+}
+</style>
 </head>
 <body>
-	<div>
 
-		<p th:text="'Name: ' + ${competition.name}" />
-		<p th:text="'Date: ' + ${competition.date}" />
+<div class="navbar navbar-default" role="navigation" id="topnavbar">
+      <div class="container">
+        <div class="navbar-header">
+     
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        
 
-		<p th:text="'Completed: ' + ${competition.completed}" />
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="/"><span class="glyphicon glyphicon-home"></span> Profile</a>
+            </li>
+      
+      		 <li>
+              <a href="/competition"> <span class="glyphicon glyphicon-star"></span>Competitions</a>
+            </li>
+          </ul>
+          
+          <ul class="nav navbar-nav navbar-right">
+                <li>
+                   <a href="/logout">
+                        <span class="glyphicon glyphicon-user"></span>&nbsp;
+                        <strong>Log out</strong>
+                      
+                    </a>
+     
+                </li>
+            </ul>
+
+        </div>
+      </div>
+    </div>
+
+
+	 <div >
+
+		<h1 th:text="${competition.name}" ></h1>
+	
+	<ul class="list-group">
+		<li class="list-group-item" th:text="'Date: ' + ${competition.date}" ></li>
+
+		<li class="list-group-item" th:text="'Completed: ' + ${competition.completed}" ></li>
 		
-		<p th:text="${role}" />
+
+		
+	</ul>
 
 		<div></div>
 		<div th:if="${role == 'Role_Admin'}">
@@ -24,11 +111,11 @@
 
 				<div th:if="${competition.competitors != null}">
 					<h3>Competitors</h3>
-					<ul>
-						<li th:each="item : ${competition.competitors}" th:text="${item}"></li>
+					<ul id="myUL" th:each="item : ${competition.competitors}">
+						<li >  <a th:href="@{/admin/weighin/edit/} + ${competition.id} + '/' + ${item.id}" th:text="${item.firstName} + ' ' + ${item.lastName}"></a></li>
 					</ul>
 				</div>
-				<h4>Add Competitor.</h4>
+	<!-- 			<h4>Add Competitor.</h4>
 				<form action="#" th:action="@{/competitions/} + ${competition.id}"
 					th:object="${email}" method="post">
 
@@ -39,7 +126,8 @@
 						<input type="submit" value="Submit" /> <input type="reset"
 							value="Reset" />
 					</p>
-				</form>
+				</form> -->
+
 
 
 

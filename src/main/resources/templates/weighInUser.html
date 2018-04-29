@@ -2,16 +2,54 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Weigh in</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<link rel="stylesheet" type="text/css"
-	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body>
+
+<div class="navbar navbar-default" role="navigation" id="topnavbar">
+      <div class="container">
+        <div class="navbar-header">
+     
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        
+
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="/"><span class="glyphicon glyphicon-home"></span> Profile</a>
+            </li>
+      
+      		 <li>
+              <a href="/competition"> <span class="glyphicon glyphicon-star"></span>Competitions</a>
+            </li>
+          </ul>
+          
+          <ul class="nav navbar-nav navbar-right">
+                <li>
+                   <a href="/logout">
+                        <span class="glyphicon glyphicon-user"></span>&nbsp;
+                        <strong>Log out</strong>
+                      
+                    </a>
+     
+                </li>
+            </ul>
+
+        </div>
+      </div>
+    </div>
 
 
 
