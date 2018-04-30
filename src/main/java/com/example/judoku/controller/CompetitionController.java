@@ -214,6 +214,14 @@ public class CompetitionController {
 				// even...
 			} else {
 				// odd...
+				
+
+				
+				Competitor move = competitors.get(competitors.size()-1);
+				competitors.remove((competitors.size()-1));
+				competitors.add(0, move );
+				
+				
 				Competitor competitor = new Competitor();
 				competitor.setName("BYE");
 				competitors.add(competitor);
@@ -254,9 +262,7 @@ public class CompetitionController {
 		}
 		
 		
-		
-		
-		
+
 		
 		
 		
@@ -270,6 +276,7 @@ public class CompetitionController {
 		}
 	
 		map.addAttribute("role", role);
+		map.addAttribute("compId", competitionId);
 		
 		map.addAttribute("silver", silver);
 		map.addAttribute("gold", gold);
@@ -536,7 +543,7 @@ public class CompetitionController {
 	}
 
 	@GetMapping("/competition")
-	public String compSearch(ModelMap map) {
+	public String compSearch(Principal principal, ModelMap map) {
 		List<Tournament> competitions = tournamentRepository.findAll();
 		int currentYear = LocalDateTime.now().getYear();
 		int yearCounter = currentYear;
@@ -598,6 +605,15 @@ public class CompetitionController {
 			}
 		
 		String selectedYear = String.valueOf(currentYear);
+		String role = "Role_User";
+		User admin = userRepository.findByEmail(principal.getName());
+		for (Role r : admin.getRoles()) {
+			if (r.getName().equalsIgnoreCase("Role_Admin")) {
+				role = "Role_Admin";
+			}
+		}
+	
+		map.addAttribute("role", role);
 		
 		map.addAttribute("upcoming", upcoming);
 		map.addAttribute("selectedYear", selectedYear);
@@ -608,7 +624,7 @@ public class CompetitionController {
 	}
 
 	@PostMapping("/competition/search")
-	public String compSearchPost(ModelMap map, @ModelAttribute Year year) {
+	public String compSearchPost(ModelMap map, @ModelAttribute Year year, Principal principal) {
 		List<Tournament> competitions = tournamentRepository.findAll();
 		int currentYear = LocalDateTime.now().getYear();
 		int yearCounter = currentYear;
@@ -676,6 +692,16 @@ public class CompetitionController {
 			}
 		
 		String selectedYear = year.getYear();
+		
+		String role = "Role_User";
+		User admin = userRepository.findByEmail(principal.getName());
+		for (Role r : admin.getRoles()) {
+			if (r.getName().equalsIgnoreCase("Role_Admin")) {
+				role = "Role_Admin";
+			}
+		}
+	
+		map.addAttribute("role", role);
 		
 		map.addAttribute("upcoming", upcoming);
 		map.addAttribute("selectedYear", selectedYear);

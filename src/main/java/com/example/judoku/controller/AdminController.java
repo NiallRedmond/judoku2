@@ -138,7 +138,7 @@ public class AdminController {
 					{
 					    b = true;
 						u.setWeighedIn(b);
-						u.setMessage("Weigh in complete - Click to edit");
+						u.setMessage("  Weigh in complete - Click to edit");
 					}
 
 				}

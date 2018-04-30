@@ -73,6 +73,7 @@
 				<th>Player</th>
 			</tr>
 			<tr th:each="item,itrStat : ${match.events}">
+					<td th:text="${item.type}"></td>
 				<td th:text="${item.timetsamp}"></td>
 				<td th:text="${item.description}"></td>
 				<td th:text="${item.user}"></td>

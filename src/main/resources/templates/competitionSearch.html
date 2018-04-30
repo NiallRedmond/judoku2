@@ -53,6 +53,12 @@
 
 <div class="container">
 
+	<div th:if="${role == 'Role_Admin'}">
+	<a  th:href="@{/createCompetition}"
+						>Create Competition</a>
+	
+	</div>
+
    
      	   <form action="/competition/search" method="post">
     <div id="container"></div>

@@ -52,29 +52,23 @@ public class UserServiceImpl implements UserService {
         User userAdmin = userRepository.findByEmail("admin@email.com");
         if (userAdmin == null){
            userAdmin = new User();
-           userAdmin.setFirstName("Admin");
-           userAdmin.setLastName("");
-           userAdmin.setBelt("Black");
+           userAdmin.setFirstName("Niall");
+           userAdmin.setLastName("Redmond");
+           userAdmin.setBelt("Yellow");
            userAdmin.setEmail("admin@email.com");
            userAdmin.setPassword(passwordEncoder.encode("admin"));
            userAdmin.setRoles(Arrays.asList(new Role("ROLE_Admin")));
                  
            userRepository.save(userAdmin);
-           
-   
-           
-           
-           
-           
-           
+     
            
         }
         User A = userRepository.findByEmail("A@email.com");
         if (A == null){
            A = new User();
            A.setBelt("White");
-           A.setFirstName("A");
-           A.setLastName("");
+           A.setFirstName("ALex");
+           A.setLastName("Smith");
            A.setEmail("A@email.com");
            A.setPassword(passwordEncoder.encode("password"));
            A.setRoles(Arrays.asList(new Role("ROLE_USER")));
@@ -85,8 +79,8 @@ public class UserServiceImpl implements UserService {
         if (B == null){
            B = new User();
            B.setBelt("White");
-           B.setFirstName("B");
-           B.setLastName("");
+           B.setFirstName("Brian");
+           B.setLastName("Conners");
            B.setEmail("B@email.com");
            B.setPassword(passwordEncoder.encode("password"));
            B.setRoles(Arrays.asList(new Role("ROLE_USER")));
@@ -97,9 +91,9 @@ public class UserServiceImpl implements UserService {
         if (C == null){
            
            C = new User();
-           C.setBelt("White");
-           C.setFirstName("C");
-           C.setLastName("");
+           C.setBelt("Yellow");
+           C.setFirstName("Ciara");
+           C.setLastName("Doyle");
            C.setEmail("C@email.com");
            C.setPassword(passwordEncoder.encode("password"));
            C.setRoles(Arrays.asList(new Role("ROLE_USER")));
@@ -110,8 +104,8 @@ public class UserServiceImpl implements UserService {
         if (D == null){
            D = new User();
            D.setBelt("White");
-           D.setFirstName("D");
-           D.setLastName("");
+           D.setFirstName("Daniel");
+           D.setLastName("Mullen");
            D.setEmail("D@email.com");
            D.setPassword(passwordEncoder.encode("password"));
            D.setRoles(Arrays.asList(new Role("ROLE_USER")));
@@ -123,8 +117,8 @@ public class UserServiceImpl implements UserService {
         if (E == null){
            E = new User();
            E.setBelt("Blue");
-           E.setFirstName("E");
-           E.setLastName("");
+           E.setFirstName("Ethan");
+           E.setLastName("Smith");
            E.setEmail("E@email.com");
            E.setPassword(passwordEncoder.encode("password"));
            E.setRoles(Arrays.asList(new Role("ROLE_USER")));
@@ -135,8 +129,8 @@ public class UserServiceImpl implements UserService {
         if (F == null){
            F = new User();
            F.setBelt("Blue");
-           F.setFirstName("F");
-           F.setLastName("");
+           F.setFirstName("Fionn");
+           F.setLastName("Dalton");
            F.setEmail("F@email.com");
            F.setPassword(passwordEncoder.encode("password"));
            F.setRoles(Arrays.asList(new Role("ROLE_USER")));
@@ -146,9 +140,9 @@ public class UserServiceImpl implements UserService {
         User G = userRepository.findByEmail("G@email.com");
         if (G == null){
            G = new User();
-           G.setBelt("Blue");
-           G.setFirstName("G");
-           G.setLastName("");
+           G.setBelt("Green");
+           G.setFirstName("Graham");
+           G.setLastName("Campion");
            G.setEmail("G@email.com");
            G.setPassword(passwordEncoder.encode("password"));
            G.setRoles(Arrays.asList(new Role("ROLE_USER")));
@@ -159,8 +153,8 @@ public class UserServiceImpl implements UserService {
         if (H == null){
            H = new User();
            H.setBelt("Blue");
-           H.setFirstName("H");
-           H.setLastName("");
+           H.setFirstName("Helen");
+           H.setLastName("O'Bryne");
            H.setEmail("H@email.com");
            H.setPassword(passwordEncoder.encode("password"));
            H.setRoles(Arrays.asList(new Role("ROLE_USER")));
