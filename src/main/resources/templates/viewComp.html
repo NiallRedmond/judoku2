@@ -98,10 +98,17 @@
 							th:href="@{/admin/closesignup/} + ${tournament.id}"
 							class="btn btn-info" role="button">Close Signup</a></td>
 
-						<td><a th:href="@{/admin/weighin/} + ${tournament.id}"
+						<td><a th:if="${tournament.completed == false}" th:href="@{/admin/weighin/} + ${tournament.id}"
 							class="btn btn-info" role="button">Weigh In</a></td>
-						<td><a th:href="@{/admin/complete/} + ${tournament.id}"
-							class="btn btn-info" role="button">Complete Tournament</a></td>
+							
+				
+							
+							<td><a th:if="${tournament.completed == false}"
+							th:href="@{/admin/complete/} + ${tournament.id}"
+							class="btn btn-info" role="button">Finish Tournament</a><a
+							th:if="${tournament.completed == true}"
+							th:href="@{/admin/completeundo/} + ${tournament.id}"
+							class="btn btn-info" role="button">undo finish tournament</a></td>
 					</tr>
 
 
@@ -118,7 +125,7 @@
 							role="button">Link Button</a></li>
 					</ul>
 				</div> -->
-					<p th:utext="${button}"></p>
+			
 
 
 
@@ -146,7 +153,7 @@
 
 
 	</div>
-
+		<p th:if="${tournament.completed == false}" th:utext="${button}"></p>
 </body>
 </html>
 

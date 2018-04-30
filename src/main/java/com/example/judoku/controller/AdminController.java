@@ -67,6 +67,27 @@ public class AdminController {
 		
 		return "redirect:/comp/" + Id;
 	}
+
+	@GetMapping("/complete/{id}")
+	public String complete(@PathVariable(value = "id") Long Id) {
+	
+		Tournament comp = tournamentRepository.findOne(Id);
+		boolean b = true;
+		comp.setCompleted(b);
+		tournamentRepository.save(comp);
+	
+	return "redirect:/comp/" + Id;
+}
+	@GetMapping("/completeundo/{id}")
+	public String completeUndo(@PathVariable(value = "id") Long Id) {
+	
+		Tournament comp = tournamentRepository.findOne(Id);
+		boolean b = false;
+		comp.setCompleted(b);
+		tournamentRepository.save(comp);
+	
+	return "redirect:/comp/" + Id;
+}
 	
 	@PostMapping("/addcategory/{id}")
 	public String createCategory(@PathVariable(value = "id") Long Id, ModelMap map, @ModelAttribute CategoryDTO dto,

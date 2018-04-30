@@ -53,6 +53,7 @@ import com.example.judoku.model.Tournament;
 import com.example.judoku.model.User;
 import com.example.judoku.repository.CompetitionRepository;
 import com.example.judoku.repository.EventRepository;
+import com.example.judoku.repository.MatchRepository;
 import com.example.judoku.repository.TournamentRepository;
 import com.example.judoku.repository.UserRepository;
 
@@ -72,6 +73,8 @@ public class CompetitionController {
 	UserRepository userRepository;
 	@Autowired
 	EventRepository eventRepository;
+	@Autowired
+	MatchRepository matchRepository;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -238,6 +241,25 @@ public class CompetitionController {
 			gold.setName(userRepository.findOne(gold.getUserId()).getFirstName() + " " + userRepository.findOne(gold.getUserId()).getLastName());
 		}
 		
+		ArrayList<String> links = new ArrayList<String>();
+		for(Match match : completedMatches)
+		{
+			String vic = userRepository.findOne(Long.parseLong(match.getVictor())).getFirstName() + " " +userRepository.findOne(Long.parseLong(match.getVictor())).getLastName();
+			String los = userRepository.findOne(Long.parseLong(match.getLoser())).getFirstName() + " " +userRepository.findOne(Long.parseLong(match.getLoser())).getLastName();
+			String link = "";
+
+			link = "<a href=\"http://localhost:8080/match/" + match.getId() + "\"> "
+					+ vic  + " vs " + los + "</a> Victor: " + vic;
+			links.add(link);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
     	
     	String role = "Role_User";
 		User admin = userRepository.findByEmail(principal.getName());
@@ -256,6 +278,7 @@ public class CompetitionController {
 		map.addAttribute("names", competitors);
 
 		map.addAttribute("buttons", buttons);
+		map.addAttribute("links", links);
 
 		// map.addAttribute("matchNum", matchNum);
 		return "competition";
@@ -1070,6 +1093,27 @@ public class CompetitionController {
 		map.addAttribute("User", user);
 		return "userCompetition";
 	}
+	
+	@GetMapping("/match/{id}")
+	public String viewMatch(@PathVariable(value = "id") Long Id, ModelMap map) {
+
+		Match match = matchRepository.findOne(Id);
+		
+		
+		
+		String vic = userRepository.findOne(Long.parseLong(match.getVictor())).getFirstName() + " " +userRepository.findOne(Long.parseLong(match.getVictor())).getLastName();
+		String los = userRepository.findOne(Long.parseLong(match.getLoser())).getFirstName() + " " +userRepository.findOne(Long.parseLong(match.getLoser())).getLastName();
+		
+		
+		map.addAttribute("match", match);
+		map.addAttribute("victor", vic);
+		map.addAttribute("loser", los);
+		
+		return "viewMatch";
+	}
+	
+	
+	
 	
 	public Double weight(Double weight)
 	{

@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	http
         .authorizeRequests()
         .antMatchers(
-        		"/competition/**",
+        
         		"/admin/**").hasRole("Admin")
         .and()
         .authorizeRequests()

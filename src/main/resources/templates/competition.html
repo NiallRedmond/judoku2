@@ -57,7 +57,7 @@
 
 	<div class="container" th:if="${not #lists.isEmpty(names)}">
 
-
+	<div th:if="${role == 'Role_Admin'}">
 		<div  th:if="${#lists.size(names) > 1}">
 
 			<table class="table">
@@ -78,9 +78,10 @@
 			</table>
 
 		</div>
+		</div>
 		<div  th:unless="${#lists.size(names) > 1}">
 		
-		
+<!-- 		
 			<table class="table">
 				<tr>
 					<th></th>
@@ -97,7 +98,7 @@
 				</tr>
 
 
-			</table>
+			</table> -->
 			
 			<ul id="myUL">
 
@@ -115,20 +116,20 @@
 		
 		</div>
 		
+		<div th:if="${links != null}">
+  
+    <ul class="list=group">
+     <li class="list-group-item list-group-item-success" th:text="'Completed Matches:'"></li>
+       <li class="list-group-item" th:each="item : ${links}" th:utext="${item}"></li>
+    </ul>
+    
+
+
+</div>
+		
 	</div>
 
-	<ul id="myUL" th:each="item,itrStat : ${competitors}">
-
-		<!-- IF -->
-		<li th:if="${item.message == null}"><a
-			th:href="@{/admin/weighin/} + ${competition.id} + '/' + ${item.userId}"
-			th:text="${item.userName}"></a></li>
-		<!-- ELSE -->
-		<li th:unless="${item.message == null}"><a
-			th:href="@{/admin/weighin/} + ${competition.id} + '/' + ${item.userId}"
-			th:text="${item.userName} + ${item.message}"></a></li>
-
-	</ul>
+	
 
 </body>
 </html>

@@ -115,29 +115,31 @@
 						<li >  <a th:href="@{/admin/weighin/edit/} + ${tourId} + '/' + ${competition.id} + '/' + ${item.id}" th:text="${item.firstName} + ' ' + ${item.lastName}"></a></li>
 					</ul>
 				</div>
-	<!-- 			<h4>Add Competitor.</h4>
-				<form action="#" th:action="@{/competitions/} + ${competition.id}"
-					th:object="${email}" method="post">
-
-					<p>
-						User email: <input type="text" th:field="*{text}" />
-					</p>
-					<p>
-						<input type="submit" value="Submit" /> <input type="reset"
-							value="Reset" />
-					</p>
-				</form> -->
+				
 
 
+              </div>
+              <div th:unless="${competition.completed == false}">
+
+				<div th:if="${competition.competitors != null}">
+					<h3>Competitors</h3>
+					<ul id="myUL" th:each="item : ${competition.competitors}">
+						<li >  <a th:href="@{/profile/} + ${item.id}" th:text="${item.firstName} + ' ' + ${item.lastName}"></a></li>
+					</ul>
+				</div>
+				
 
 
+              </div>
+
+             </div>
 				<div>
 					<span> <a href="/"
-						th:href="@{/competitionstart/} + ${competition.id}">Competition
-							Start!</a></span>
+						th:href="@{/competitionstart/} + ${competition.id}">Go to Matches</a></span>
 				</div>
-			</div>
-		</div>
+			
+
+	
 
 		<!-- 			<div th:if="${competition.signUpOpen == true}">
 
