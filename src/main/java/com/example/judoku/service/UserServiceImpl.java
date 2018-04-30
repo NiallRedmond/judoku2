@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(registration.getFirstName());
         user.setLastName(registration.getLastName());
         user.setEmail(registration.getEmail());
+        user.setBelt("White");
         user.setPassword(passwordEncoder.encode(registration.getPassword()));
         user.setRoles(Arrays.asList(new Role("ROLE_USER")));
         
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
         User D = userRepository.findByEmail("D@email.com");
         if (D == null){
            D = new User();
-           C.setBelt("White");
+           D.setBelt("White");
            D.setFirstName("D");
            D.setLastName("");
            D.setEmail("D@email.com");

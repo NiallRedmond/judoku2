@@ -60,27 +60,6 @@
     </div>
 
 
-    <div class="container" class="row">
-
-      <div class="page-header" id="banner">
-        <div class="row">
-          <div class="col-lg-8 col-md-7 col-sm-6">
-       
-       <img src="ban.png">
-       
-       
-           
-          </div>
-          <div class="col-lg-4 col-md-5 col-sm-6">
-            <div class="sponsor">
-            </div>
-          </div>
-        </div>
-      </div>
-</div>
-
-
-
 <div class="container" class="row">
       <div class="row">
 
@@ -94,7 +73,7 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-3 col-lg-3 " align="left"> 
-                
+
                 <div th:if="${User.belt == 'White'}"><img alt="Belt" th:src="@{/img/white.png}" width="120" height="46" >White Belt</div> 
                 <div th:if="${User.belt == 'Yellow'}"><img alt="Belt" th:src="@{/img/yellow.png}" width="120" height="46" >Yellow Belt</div> 
                 <div th:if="${User.belt == 'Green'}"><img alt="Belt" th:src="@{/img/green.png}" width="120" height="46" >Green Belt</div> 
@@ -130,7 +109,7 @@
                          <tr>
                              <tr>
                         <td><span> <a href="/" th:href="@{/user/competition/} + ${User.id}" >View Competition History</a></span></td>
-
+                       
                       </tr>
    
                      
@@ -142,15 +121,15 @@
               </div>
             </div>
                  <div class="panel-footer">
-          		 <div th:if="${role == 'Role_Admin'}">
+     		 <div th:if="${role == 'Role_Admin'}">
                         <span class="pull-right">
-                            <a  th:href="@{/admin/edit/} + ${User.id}" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a th:href="@{/admin/edit/} + ${User.id}" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
                         
                         </span></div>
                     </div>
             
           </div>
-          <div th:if="${role == 'Role_Admin'}">
+                    <div th:if="${role == 'Role_Admin'}">
           <span>	<a th:href="@{/admin/users}" class="btn btn-info" role="button">User Database</a></span>
           </div>
         </div>

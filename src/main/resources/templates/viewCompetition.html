@@ -91,12 +91,12 @@
     </div>
 
 
-	 <div >
+	 <div class="container" >
 
 		<h1 th:text="${competition.name}" ></h1>
 	
 	<ul class="list-group">
-		<li class="list-group-item" th:text="'Date: ' + ${competition.date}" ></li>
+
 
 		<li class="list-group-item" th:text="'Completed: ' + ${competition.completed}" ></li>
 		
@@ -112,7 +112,7 @@
 				<div th:if="${competition.competitors != null}">
 					<h3>Competitors</h3>
 					<ul id="myUL" th:each="item : ${competition.competitors}">
-						<li >  <a th:href="@{/admin/weighin/edit/} + ${competition.id} + '/' + ${item.id}" th:text="${item.firstName} + ' ' + ${item.lastName}"></a></li>
+						<li >  <a th:href="@{/admin/weighin/edit/} + ${tourId} + '/' + ${competition.id} + '/' + ${item.id}" th:text="${item.firstName} + ' ' + ${item.lastName}"></a></li>
 					</ul>
 				</div>
 	<!-- 			<h4>Add Competitor.</h4>

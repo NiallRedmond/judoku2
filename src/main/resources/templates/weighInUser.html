@@ -52,11 +52,11 @@
     </div>
 
 
+<div class="container">
 
-	<p th:text="'Name: ' + ${User.firstName} + ' ' + ${User.lastName}" />
 
-	<div class="container">
-		<h2>Weigh in</h2>
+	
+		<h2 th:text="'Name: ' + ${User.firstName} + ' ' + ${User.lastName}">Weigh in</h2>
 
 		<form th:action="@{/weighinuser}" th:object="${WeightDto}"
 			method="post">

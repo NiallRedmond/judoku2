@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Weigh in</title>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+
+	<div class="navbar navbar-default" role="navigation" id="topnavbar">
+		<div class="container">
+			<div class="navbar-header">
+
+				<button class="navbar-toggle" type="button" data-toggle="collapse"
+					data-target="#navbar-main">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+			</div>
+
+
+			<div class="navbar-collapse collapse" id="navbar-main">
+				<ul class="nav navbar-nav">
+					<li><a href="/"><span class="glyphicon glyphicon-home"></span>
+							Profile</a></li>
+
+					<li><a href="/competition"> <span
+							class="glyphicon glyphicon-star"></span>Competitions
+					</a></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/logout"> <span
+							class="glyphicon glyphicon-user"></span>&nbsp; <strong>Log
+								out</strong>
+
+					</a></li>
+				</ul>
+
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container">
+
+
+
+		<h2 th:text="'Name: ' + ${User.firstName} + ' ' + ${User.lastName}">Weigh
+			in</h2>
+
+		<form th:action="@{/admin/weighin/edit}" th:object="${MoveDto}"
+			method="post">
+
+
+			<input type="hidden" name="userId" th:value="${userId}" /> 
+			<input type="hidden" name="tournamentId" th:value="${tourId}" />
+		
+			<input type="hidden" name="moveFromId" th:value="${compId}" />
+
+			<div class="form-group">
+				<label for="sel1">Select Category:</label> <select th:field="*{moveToId}" class="form-control"
+					id="sel1" >
+					<option th:each="item,itrStat : ${categories}" th:text="${item.name}" th:value="${item.id}"></option>
+
+				</select>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-success">Submit</button>
+
+			</div>
+		</form>
+	</div>
+
+
+
+
+
+
+<ul id="myUL" th:each="item,itrStat : ${competitors}">
+
+<!-- IF -->
+<li th:if="${item.message == null}">
+  <a th:href="@{/admin/weighin/} + ${competition.id} + '/' + ${item.userId}" th:text="${item.userName}"></a>
+</li>
+<!-- ELSE -->
+<li th:unless="${item.message == null}">
+    <a th:href="@{/admin/weighin/} + ${competition.id} + '/' + ${item.userId}" th:text="${item.userName} + ${item.message}"></a>
+</li>
+
+</ul>
+
+
+
+
+</body>
+</html>

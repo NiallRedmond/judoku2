@@ -37,6 +37,9 @@
 	background-color: #4CAF50;
 	color: white;
 }
+h1 {
+    color: #000000;
+}
 </style>
     
 </head>
@@ -80,78 +83,76 @@
       </div>
     </div>
 
+<div class="container">
 
 
 
-
-    <p th:text="'Match of ' + ${competitor1.name} + ' and ' + ${competitor2.name}"/>
-<p id="demo"></p>
 
 <table id="purchases">
 
 	<tr>
 		<th>
-			<p th:text="${competitor1.name}"/>
+			<h2  th:text="${competitor1.name}"></h2>
 		</th>
 		<th>
-			<h1 id="time"><time >00:00:00</time></h1>
+			<h1 id="time"><font color="black"><time >00:00:00</time></font></h1>
 			<button id="start">start</button>
 			<button id="stop">stop</button>
 			<button id="clear">clear</button>
 		</th>			
 		<th>
-			<p th:text="${competitor2.name}"/>
+			<h2 th:text="${competitor2.name}"></h2>
 		</th>
 	</tr>
 	<tr>
 		<td>
-			<button onclick="addFields('Ippon')" >Ippon!</button>
+			<button onclick="addFields('Ippon', ' ')" >Ippon!</button>
 		</td>
 		<td>
 			
 		</td>
 		<td>
-			<button onclick="addFields('Ippon')">Ippon!</button>
+			<button onclick="addFields('Ippon', 'player2')">Ippon!</button>
 		</td>
 	</tr>
 		<tr>
 		<td>
-			<button onclick="addFields('Wazari')" >Wazari</button>
+			<button onclick="addFields('Wazari', ' ')" >Wazari</button>
 		</td>
 		<td>
 			
 		</td>
 		<td>
-			<button onclick="addFields('Wazari')">Wazari</button>
+			<button onclick="addFields('Wazari', 'player2')">Wazari</button>
 		</td>
 	</tr>
 		<tr>
 		<td>
-			<button onclick="addFields('Shido')" >Shido</button>
+			<button onclick="addFields('Shido', ' ')" >Shido</button>
 		</td>
 		<td>
 			
 		</td>
 		<td>
-			<button onclick="addFields('Shido')">Shido</button>
+			<button onclick="addFields('Shido', 'player2')">Shido</button>
 		</td>
 	</tr>
 		<tr>
 		<td>
-			<button onclick="addFields(' ')" >Event</button>
+			<button onclick="addFields(' ' , ' ')" >Event</button>
 		</td>
 		<td>
 			
 		</td>
 		<td>
-			<button onclick="addFields(' ')" >Event</button>
+			<button onclick="addFields(' ', 'player2')" >Event</button>
 		</td>
 	</tr>
 
 </table>  
 <br/>
 
-<a href="#" id="filldetails" onclick="addFields()" class="btn btn-default">Add event</a>
+
  
  	<!-- <form action="#" th:action="@{/competition/save}" th:object="${event}" method="post"> -->
  	   <form action="/competition/save" method="post" th:object="${Competition}">
@@ -167,7 +168,7 @@
   		 <input type="submit" value="Submit">
     </form>
 
-
+</div>
 </body>
 
     <script th:inline="javascript">
@@ -232,7 +233,7 @@ function myFunction() {
 var count =0;   
 
 
-function addFields(type){
+function addFields(type , player){
 	
 	count = count + 1;
 	
@@ -272,6 +273,11 @@ function addFields(type){
 		var option = document.createElement("option");
 		option.value= player2Id;
 		option.appendChild(document.createTextNode(player2));
+		
+		if(player === 'player2' )
+			{
+				option.selected = 'selected';
+			}
 		select.appendChild(option);
 
 		div.appendChild(select);

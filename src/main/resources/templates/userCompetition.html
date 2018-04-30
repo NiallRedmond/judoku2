@@ -54,28 +54,13 @@
 <div class="container">
 
    
-     	   <form action="/competition/search" method="post">
-    <div id="container"></div>
-    Select Year:
-    <div th:if="${years != null}">
-  
-
-
-    <select name="year" >
-  
-    <option th:each="int : ${years}" th:value="${int}" th:text="${int}"></option>
- 	 </select>
-
-  		 <input type="submit" value="Submit">
-  		 </div>
-
-    </form>
+ 
     
-</div>
+
 <div th:if="${links != null}">
   
     <ul class="list=group">
-     <li class="list-group-item list-group-item-success" th:text="${selectedYear}"></li>
+     <li class="list-group-item list-group-item-success" th:text="${User.firstName} + ' ' + ${User.lastName}  +  ' competition history'"></li>
        <li class="list-group-item" th:each="item : ${links}" th:utext="${item}"></li>
     </ul>
     
@@ -86,21 +71,12 @@
 
     <ul class="list=group">
     
-       <li class="list-group-item">No competitions exist from selected year.</li>
+       <li class="list-group-item">User has no competition history</li>
     </ul>
 </div>
 
 
-<div th:if="${upcoming != null}">
-  
-    <ul class="list=group">
-       <li class="list-group-item list-group-item-success">Upcoming</li>
-       <li class="list-group-item" th:each="item : ${upcoming}" th:utext="${item}"></li>
-    </ul>
-    
-
 
 </div>
-
 </body>
 </html>

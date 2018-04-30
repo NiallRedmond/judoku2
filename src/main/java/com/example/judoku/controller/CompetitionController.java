@@ -1,11 +1,14 @@
 package com.example.judoku.controller;
 
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -35,7 +38,9 @@ import com.example.judoku.dto.CategoryDTO;
 import com.example.judoku.dto.CompetitionCreationDTO;
 import com.example.judoku.dto.Competitor;
 import com.example.judoku.dto.Email;
+import com.example.judoku.dto.GoldDto;
 import com.example.judoku.dto.MatchGen;
+import com.example.judoku.dto.SilverDto;
 import com.example.judoku.dto.UserRegistrationDto;
 import com.example.judoku.dto.WeightDto;
 import com.example.judoku.dto.Year;
@@ -85,7 +90,7 @@ public class CompetitionController {
 	}
 
 	@GetMapping("/competitionstart/{id}")
-	public String competition(@PathVariable(value = "id") Long competitionId, ModelMap map) {
+	public String competition(@PathVariable(value = "id") Long competitionId, ModelMap map, Principal principal) {
 
 		// List<Integer> matchNum = new ArrayList<Integer>();
 		List<Competitor> competitors = new ArrayList<Competitor>();
@@ -217,7 +222,36 @@ public class CompetitionController {
 		}
 
 		buttons.add(" ");
-
+		
+		GoldDto gold = new GoldDto();
+		SilverDto silver = new SilverDto();
+		if(comp.getSilver() != null)
+		{
+			
+			silver.setUserId(Long.parseLong(comp.getSilver()));
+			silver.setName(userRepository.findOne(silver.getUserId()).getFirstName() + " " + userRepository.findOne(silver.getUserId()).getLastName());
+		}
+		if(comp.getGold() != null)
+		{
+			
+			gold.setUserId(Long.parseLong(comp.getGold()));
+			gold.setName(userRepository.findOne(gold.getUserId()).getFirstName() + " " + userRepository.findOne(gold.getUserId()).getLastName());
+		}
+		
+    	
+    	String role = "Role_User";
+		User admin = userRepository.findByEmail(principal.getName());
+		for (Role r : admin.getRoles()) {
+			if (r.getName().equalsIgnoreCase("Role_Admin")) {
+				role = "Role_Admin";
+			}
+		}
+	
+		map.addAttribute("role", role);
+		
+		map.addAttribute("silver", silver);
+		map.addAttribute("gold", gold);
+		map.addAttribute("category", comp);
 		map.addAttribute("welcomeMessage", "welcome");
 		map.addAttribute("names", competitors);
 
@@ -278,6 +312,15 @@ public class CompetitionController {
 		System.out.println(matchPost.toString());
 		System.out.println("=====================");
 
+		if(matchPost.getEventType()==null)
+		{
+			matchPost.setEventDescription("");
+			matchPost.setEventType("");
+			matchPost.setEventTimestamp("");
+			matchPost.setEventPlayer("");
+
+		}
+		
 		ArrayList<String> types = new ArrayList<String>();
 		for (String word : matchPost.getEventType().split(",")) {
 			types.add(word);
@@ -418,8 +461,8 @@ public class CompetitionController {
 
 	}
 
-	@GetMapping("/competition/{id}")
-	public String viewCompetition(@PathVariable(value = "id") Long competitionId, ModelMap map, Principal principal) {
+	@GetMapping("/competition/{tourId}/{id}")
+	public String viewCompetition(@PathVariable(value = "id") Long competitionId, @PathVariable(value = "tourId") Long tournamentId, ModelMap map, Principal principal) {
 		Competition comp = competitionRepository.findOne(competitionId);
 		Email email = new Email();
 		String role = "Role_User";
@@ -430,6 +473,7 @@ public class CompetitionController {
 			}
 		}
 
+		map.addAttribute("tourId", tournamentId);
 		map.addAttribute("competition", comp);
 		map.addAttribute("email", email);
 		map.addAttribute("user", user);
@@ -468,7 +512,7 @@ public class CompetitionController {
 		return "competition2";
 	}
 
-	@GetMapping("/competition/search")
+	@GetMapping("/competition")
 	public String compSearch(ModelMap map) {
 		List<Tournament> competitions = tournamentRepository.findAll();
 		int currentYear = LocalDateTime.now().getYear();
@@ -496,7 +540,44 @@ public class CompetitionController {
 				}
 			}
 		}
+		ArrayList<String> upcoming =new ArrayList<String>();
+		for(Tournament comp : competitions)
+		{
 
+		
+		
+		Date date = new Date();
+	
+			
+
+			    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+				try {
+					date = sdf.parse(comp.getDate());
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
+				System.out.println("==========================");
+			    Date currentDate = new Date();      
+			    if(date.after(currentDate)){
+			        System.out.println("after ");
+			        String link = "";
+
+					link = "<a href=\"http://localhost:8080/comp/" + comp.getId() + "\"> "
+							+ comp.getName() + " " + comp.getDate() + "</a>";
+					upcoming.add(link);
+			    }else
+			        System.out.println("before");
+		
+
+			}
+		
+		String selectedYear = String.valueOf(currentYear);
+		
+		map.addAttribute("upcoming", upcoming);
+		map.addAttribute("selectedYear", selectedYear);
 		map.addAttribute("years", years);
 		map.addAttribute("links", links);
 		return "CompetitionSearch";
@@ -531,7 +612,50 @@ public class CompetitionController {
 				}
 			}
 		}
+		
+		ArrayList<String> upcoming =new ArrayList<String>();
+		for(Tournament comp : competitions)
+		{
 
+		
+
+		Date date = new Date();
+	
+			
+
+			    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+				try {
+					date = sdf.parse(comp.getDate());
+				} catch (ParseException e) {
+			
+					e.printStackTrace();
+				}
+		
+				System.out.println("==========================");
+			    Date currentDate = new Date();      
+			    if(date.after(currentDate)){
+			        System.out.println("after ");
+			        
+					String link = "";
+
+					link = "<a href=\"http://localhost:8080/comp/" + comp.getId() + "\"> "
+							+ comp.getName() + " " + comp.getDate() + "</a>";
+					upcoming.add(link);
+			        
+			        
+			        
+			        
+			    }else
+			        System.out.println("before");
+		
+
+			}
+		
+		String selectedYear = year.getYear();
+		
+		map.addAttribute("upcoming", upcoming);
+		map.addAttribute("selectedYear", selectedYear);
 
 		
 		map.addAttribute("years", years);
@@ -652,20 +776,28 @@ public class CompetitionController {
 		String result ="";
 		Tournament comp = tournamentRepository.findOne(Id);
 		User user = userRepository.findByEmail(principal.getName());
+		boolean dup=false;
+		Collection<User> users = comp.getCompetitors();
 		
-		
-		
-		
-		if(comp.getSignUpOpen())
+		for(User u : users)
 		{
-			Collection<User> users = comp.getCompetitors();
+			if(u.getId() == user.getId())
+			{
+				dup = true;
+			}
+		}
+		
+		
+		if(comp.getSignUpOpen() && dup == false)
+		{
+			
 			users.add(user);
 			comp.setCompetitors(users);
 			result = "User successfully signed up";
 		}
 		else
 		{
-			result = "Sign up unsuccessful";
+			result = "Sign up unsuccessful. User is already signed up.";
 		}
 		
 		tournamentRepository.save(comp);
@@ -876,6 +1008,68 @@ public class CompetitionController {
 		return "redirect:/admin/weighin/" + dto.getTourId();
 	}
 	
+	@GetMapping("/user/competition/{id}")
+	public String userCompetitions(@PathVariable(value = "id") Long Id, ModelMap map) {
+	
+		
+		
+
+		User user = userRepository.findOne(Id);
+		
+		ArrayList<Tournament> competitions = (ArrayList<Tournament>) tournamentRepository.findAll();
+		ArrayList<Tournament> userCompetitions = new ArrayList<Tournament>();
+		ArrayList<String> links = new ArrayList<String>();
+
+		for(Tournament comp : competitions)
+		{
+			Collection<User> competitors = comp.getCompetitors();
+			
+			for(User u : competitors)
+			{
+				if(u.getId() == user.getId())
+				{
+					userCompetitions.add(comp);
+				}
+			}
+			
+			
+	
+		}
+		
+		for(Tournament comp : userCompetitions)
+		{
+			Collection<Competition> categories = comp.getCategories();
+					
+			for(Competition cat : categories)
+			{
+				Collection<User> competitors = cat.getCompetitors();
+						
+				for(User u : competitors)
+				{
+					if(u.getId() == user.getId()){
+						
+						String link = "";
+
+						link = "<a href=\"http://localhost:8080/competition/" + comp.getId() + "/" + cat.getId() + "\"> "
+								  + cat.getName() + " category, "  + comp.getName() + " Date: " + comp.getDate() + "</a>";
+						links.add(link);
+						
+					}
+					
+				}
+				
+						
+			}
+			
+		}
+		
+		
+		
+	
+		map.addAttribute("links", links);
+		map.addAttribute("User", user);
+		return "userCompetition";
+	}
 	
 	public Double weight(Double weight)
 	{

@@ -21,13 +21,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.judoku.dto.Belt;
 import com.example.judoku.dto.CategoryDTO;
 import com.example.judoku.dto.Email;
+import com.example.judoku.dto.MoveDto;
+import com.example.judoku.dto.Query;
 import com.example.judoku.dto.UserDto;
 import com.example.judoku.dto.WeightDto;
 import com.example.judoku.model.Competition;
 import com.example.judoku.model.Tournament;
 import com.example.judoku.model.User;
+import com.example.judoku.repository.CompetitionRepository;
 import com.example.judoku.repository.TournamentRepository;
 import com.example.judoku.repository.UserRepository;
 
@@ -39,6 +43,8 @@ public class AdminController {
 	UserRepository userRepository;
 	@Autowired
 	TournamentRepository tournamentRepository;
+	@Autowired
+	CompetitionRepository competitionRepository;
 	
 
 	@GetMapping("/opensignup/{id}")
@@ -150,19 +156,185 @@ public class AdminController {
 		return "weighInUser";
 	} 
 	
+	@GetMapping("/weighin/edit/{tourId}/{compId}/{userId}")
+	public String edit(@PathVariable(value = "tourId") Long tourId, @PathVariable(value = "compId") Long compId, @PathVariable(value = "userId") Long userId, ModelMap map) {
 	
+    	Tournament comp = tournamentRepository.findOne(tourId);
+    	User user = userRepository.findOne(userId);
+		
+		
+		
 	
-	// Get All Users
+		map.addAttribute("MoveDto", new MoveDto());
+		map.addAttribute("userId", userId);
+		map.addAttribute("User", user);
+		map.addAttribute("compId", compId);
+		map.addAttribute("tourId", tourId);
+		map.addAttribute("categories", comp.getCategories());
+		
+		return "moveUser";
+	} 
+
+	@PostMapping("/weighin/edit")
+	public String createCategory(ModelMap map, @ModelAttribute MoveDto dto,
+			BindingResult result) {
+
+		System.out.println(dto.getMoveFromId());
+		System.out.println(dto.getMoveToId());
+		System.out.println(dto.getUserId());
+		System.out.println(dto.getTournamentId());
+
+		User user = userRepository.findOne(dto.getUserId());
+		
+		Competition categoryMoveFrom = competitionRepository.findOne(dto.getMoveFromId());
+		Competition categoryMoveTo = competitionRepository.findOne(dto.getMoveToId());
+		
+		Collection<User> categoryMoveFromCompetitors = categoryMoveFrom.getCompetitors();
+		Collection<User> categoryMoveToCompetitors = categoryMoveTo.getCompetitors();
+	
+		System.out.println("=============================================");
+		System.out.println(user.getFirstName());
+		System.out.println("From: " + categoryMoveFrom.getName());
+		System.out.println("To: " + categoryMoveTo.getName());
+		System.out.println("=============================================");
+		
+		boolean dup = false;
+		for(User u : categoryMoveToCompetitors)
+		{
+			if(u.getId() == user.getId())
+			{
+			    dup = true;
+			}
+		}
+		
+		if(dup == false)
+		{
+			categoryMoveToCompetitors.add(user);
+		}
+		
+		categoryMoveFromCompetitors.remove(user);
+		
+		
+		categoryMoveFrom.setCompetitors(categoryMoveFromCompetitors);
+		categoryMoveTo.setCompetitors(categoryMoveToCompetitors);
+		
+		competitionRepository.save(categoryMoveFrom);
+		competitionRepository.save(categoryMoveTo);
+				
+		
+		return "redirect:/comp/" + dto.getTournamentId();
+
+	}
+	
+	@GetMapping("/profile/{id}")
+	public String edit( @PathVariable(value = "id") Long id, ModelMap map) {
+	
+  
+    	User user = userRepository.findOne(id);
+		
+		
+		
+    	
+
+		map.addAttribute("User", user);
+
+		
+		return "profile";
+	} 
+	
+
+	
 	@GetMapping("/users")
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
+	public String userSearch(ModelMap map) {
+		// List<Book> books = bookRepository.findAll();
+		Query query = new Query();
+	
+		ArrayList<String> links = new ArrayList<String>();
+
+		map.addAttribute("links", links);
+		map.addAttribute("Query", query);
+		return "userDatabase";
+
 	}
 	
-	// Create a new user
+	
 	@PostMapping("/users")
-	public User createUsers(@Valid @RequestBody User user) {
-	    return userRepository.save(user);
+	public String bookSearchPost(ModelMap map, @ModelAttribute Query query) {
+		List<User> users = userRepository.findAll();
+		System.out.println("=================================");
+		System.out.println(query.getQuery());
+		System.out.println("=================================");
+
+		ArrayList<String> links = new ArrayList<String>();
+
+
+
+
+		if (query.getQuery() != "") {
+
+			for (int i = 0; i < users.size(); i++) {
+
+				if (users.get(i).getFirstName().toLowerCase().contains((query.getQuery().toLowerCase())) || users.get(i).getLastName().toLowerCase().contains((query.getQuery().toLowerCase()))  ) {
+					String link = "";
+
+
+					link = "<a href=\"http://localhost:8080/profile/" + users.get(i).getId() + "\"> "
+							+ users.get(i).getFirstName() + " " +  users.get(i).getLastName() +  "</a>" +  " - email: " + users.get(i).getEmail();
+					links.add(link);
+				} else {
+
+				}
+
+			}
+
+		}
+
+
+
+		System.out.println("=================================");
+		System.out.println(users.toString());
+
+
+		map.addAttribute("links", links);
+		return "userDatabase";
+
 	}
+	
+	
+	@GetMapping("/edit/{id}")
+	public String userEdit( @PathVariable(value = "id") Long id, ModelMap map) {
+		
+		User user = userRepository.findOne(id);
+		Belt belt = new Belt();
+		
+		
+		
+		map.addAttribute("User", user);
+		map.addAttribute("Belt", belt);
+		return "editProfile";
+
+	}
+	
+	@PostMapping("/edit")
+	public String userEditPost( @ModelAttribute Belt belt, ModelMap map) {
+		
+		User user = userRepository.findOne(belt.getUserId());
+		
+		System.out.println(belt.getBelt());
+		
+		user.setBelt(belt.getBelt());
+		
+		userRepository.save(user);
+		
+		
+		map.addAttribute("User", user);
+		map.addAttribute("Belt", belt);
+		return "redirect:/profile/" + belt.getUserId();
+
+	}
+	
+
+
 
 	// Get a Single User
 	@GetMapping("/users/{id}")
