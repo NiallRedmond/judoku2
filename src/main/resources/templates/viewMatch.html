@@ -76,7 +76,9 @@
 					<td th:text="${item.type}"></td>
 				<td th:text="${item.timetsamp}"></td>
 				<td th:text="${item.description}"></td>
-				<td th:text="${item.user}"></td>
+				<!-- <td th:text="${item.user}"></td> -->
+				<td th:if="${match.victor == item.user}" th:text="${victor}"></td>
+				<td th:unless="${match.victor == item.user}" th:text="${loser}"></td>
 			</tr>
 
 

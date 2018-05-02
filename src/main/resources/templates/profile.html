@@ -1,158 +1,197 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <title>Home</title>
-    <style>
-    
+<title>Home</title>
+<style>
+</style>
 
-    </style>
-    
-    
+
 </head>
 <body>
 
 
 
-<div class="navbar navbar-default" role="navigation" id="topnavbar">
-      <div class="container">
-        <div class="navbar-header">
-     
-          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
-        
+	<div class="navbar navbar-default" role="navigation" id="topnavbar">
+		<div class="container">
+			<div class="navbar-header">
 
-        <div class="navbar-collapse collapse" id="navbar-main">
-          <ul class="nav navbar-nav">
-            <li>
-              <a href="/"><span class="glyphicon glyphicon-home"></span> Profile</a>
-            </li>
-      
-      		 <li>
-              <a href="/competition"> <span class="glyphicon glyphicon-star"></span>Competitions</a>
-            </li>
-          </ul>
-          
-          <ul class="nav navbar-nav navbar-right">
-                <li>
-                   <a href="/logout">
-                        <span class="glyphicon glyphicon-user"></span>&nbsp;
-                        <strong>Log out</strong>
-                      
-                    </a>
-     
-                </li>
-            </ul>
-
-        </div>
-      </div>
-    </div>
+				<button class="navbar-toggle" type="button" data-toggle="collapse"
+					data-target="#navbar-main">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+			</div>
 
 
-<div class="container" class="row">
-      <div class="row">
+			<div class="navbar-collapse collapse" id="navbar-main">
+				<ul class="nav navbar-nav">
+					<li><a href="/"><span class="glyphicon glyphicon-home"></span>
+							Profile</a></li>
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
-   
-   
-          <div class="panel panel-info">
-            <div class="panel-heading">
-              <h3 class="panel-title" >Profile Information</h3>
-            </div>
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-md-3 col-lg-3 " align="left"> 
+					<li><a href="/competition"> <span
+							class="glyphicon glyphicon-star"></span>Competitions
+					</a></li>
+				</ul>
 
-                <div th:if="${User.belt == 'White'}"><img alt="Belt" th:src="@{/img/white.png}" width="120" height="46" >White Belt</div> 
-                <div th:if="${User.belt == 'Yellow'}"><img alt="Belt" th:src="@{/img/yellow.png}" width="120" height="46" >Yellow Belt</div> 
-                <div th:if="${User.belt == 'Green'}"><img alt="Belt" th:src="@{/img/green.png}" width="120" height="46" >Green Belt</div> 
-                <div th:if="${User.belt == 'Orange'}"><img alt="Belt" th:src="@{/img/orange.png}" width="120" height="46" >Orange Belt</div> 
-                <div th:if="${User.belt == 'Blue'}"><img alt="Belt" th:src="@{/img/blue.png}" width="120" height="46" >Blue Belt</div> 
-                <div th:if="${User.belt == 'Brown'}"><img alt="Belt" th:src="@{/img/brown.png}" width="120" height="46" >Brown Belt</div> 
-                <div th:if="${User.belt == 'Black'}"><img alt="Belt" th:src="@{/img/black.png}" width="120" height="46" >Black Belt</div> 
-                
-                
-                
-                </div>
-                
-                
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/logout"> <span
+							class="glyphicon glyphicon-user"></span>&nbsp; <strong>Log
+								out</strong>
 
-                
+					</a></li>
+				</ul>
 
-                <div class=" col-md-9 col-lg-9 "> 
-                  <table class="table table-user-information">
-                    <tbody>
-                      <tr>
-                        <td>First Name:</td>
-                        <td th:text="${User.firstName}"></td>
-                      </tr>
-                      <tr>
-                        <td>Last Name:</td>
-                       <td th:text="${User.lastName}"></td>
-                      </tr>
-                      <tr>
-                        <td>Email</td>
-                        <td th:text="${User.email}"></td>
-                      </tr>
-                   
-                         <tr>
-                             <tr>
-                        <td><span> <a href="/" th:href="@{/user/competition/} + ${User.id}" >View Competition History</a></span></td>
-                       
-                      </tr>
-   
-                     
-                    </tbody>
-                  </table>
-                  
-              
-                </div>
-              </div>
-            </div>
-                 <div class="panel-footer">
-     		 <div th:if="${role == 'Role_Admin'}">
-                        <span class="pull-right">
-                            <a th:href="@{/admin/edit/} + ${User.id}" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
-                        
-                        </span></div>
-                    </div>
-            
-          </div>
-                    <div th:if="${role == 'Role_Admin'}">
-          <span>	<a th:href="@{/admin/users}" class="btn btn-info" role="button">User Database</a></span>
-          </div>
-        </div>
-      </div>
-    </div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container" class="row">
+		<div class="row">
+
+			<div
+				class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
+
+
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">Profile Information</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-3 col-lg-3 " align="left">
+
+								<div th:if="${User.belt == 'White'}">
+									<img alt="Belt" th:src="@{/img/white.png}" width="120"
+										height="46">White Belt
+								</div>
+								<div th:if="${User.belt == 'Yellow'}">
+									<img alt="Belt" th:src="@{/img/yellow.png}" width="120"
+										height="46">Yellow Belt
+								</div>
+								<div th:if="${User.belt == 'Green'}">
+									<img alt="Belt" th:src="@{/img/green.png}" width="120"
+										height="46">Green Belt
+								</div>
+								<div th:if="${User.belt == 'Orange'}">
+									<img alt="Belt" th:src="@{/img/orange.png}" width="120"
+										height="46">Orange Belt
+								</div>
+								<div th:if="${User.belt == 'Blue'}">
+									<img alt="Belt" th:src="@{/img/blue.png}" width="120"
+										height="46">Blue Belt
+								</div>
+								<div th:if="${User.belt == 'Brown'}">
+									<img alt="Belt" th:src="@{/img/brown.png}" width="120"
+										height="46">Brown Belt
+								</div>
+								<div th:if="${User.belt == 'Black'}">
+									<img alt="Belt" th:src="@{/img/black.png}" width="120"
+										height="46">Black Belt
+								</div>
+
+
+
+							</div>
+
+
+							<div th:if="${links != null}">
+
+								<table>
+									<tr>
+										<th th:if="${not #lists.isEmpty(links)}" th:text="'Medals:'"></th>
+									
+									
+
+									</tr>
+									<tr th:each="string,itrStat : ${links}">
+										<td th:utext="${string}"></td>
+									</tr>
+
+								</table>
+
+
+							</div>
 
 
 
 
+							<div class=" col-md-9 col-lg-9 ">
+								<table class="table table-user-information">
+									<tbody>
+										<tr>
+											<td>First Name:</td>
+											<td th:text="${User.firstName}"></td>
+										</tr>
+										<tr>
+											<td>Last Name:</td>
+											<td th:text="${User.lastName}"></td>
+										</tr>
+										<tr>
+											<td>Email</td>
+											<td th:text="${User.email}"></td>
+										</tr>
+
+										<tr>
+										<tr>
+											<td><span> <a href="/"
+													th:href="@{/user/competition/} + ${User.id}">View
+														Competition History</a></span></td>
+
+										</tr>
 
 
-<div class="container">
-   
-    
+									</tbody>
+								</table>
 
-</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer">
+						<div th:if="${role == 'Role_Admin'}">
+							<span class="pull-right"> <a
+								th:href="@{/admin/edit/} + ${User.id}"
+								data-original-title="Edit this user" data-toggle="tooltip"
+								type="button" class="btn btn-sm btn-warning"><i
+									class="glyphicon glyphicon-edit"></i></a>
+
+							</span>
+						</div>
+					</div>
+
+				</div>
+				<div th:if="${role == 'Role_Admin'}">
+					<span> <a th:href="@{/admin/users}" class="btn btn-info"
+						role="button">User Database</a></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+	<div class="container"></div>
 
 
 
 
 </body>
 
-    <script th:inline="javascript">
+<script th:inline="javascript">
 $(document).ready(function() {
     var panels = $('.user-infos');
     var panelsButton = $('.dropdown-user');

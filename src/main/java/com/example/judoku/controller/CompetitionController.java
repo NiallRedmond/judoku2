@@ -139,6 +139,19 @@ public class CompetitionController {
 			System.out.println("TESTESTESTEST");
 
 			buttons.clear();
+			
+			if ((competitors.size() & 1) == 0) {
+				// even...
+			} else {
+				// odd...
+
+				Competitor move = competitors.get(competitors.size()-1);
+				competitors.remove((competitors.size()-1));
+				competitors.add(0, move );
+				
+			}
+			
+			
 
 			for (int i = 0; i < competitors.size(); i++) {
 				if ((counter % 2 == 0)) {//for every second user
@@ -148,6 +161,9 @@ public class CompetitionController {
 					String name2 = competitors.get(i).getName();
 					String id1 = competitors.get(i - 1).getId().toString();
 					String id2 = competitors.get(i).getId().toString();
+					
+					System.out.println("Name1 = " + name1 + " id1 = " + id1 );
+					System.out.println("Name2 = " + name2 + " id2 = " + id2 );
 
 					for (Match m : completedMatches) {//check if match exists
 						if (m.getVictor().equals(id1) && m.getLoser().equals(id2)
@@ -216,10 +232,10 @@ public class CompetitionController {
 				// odd...
 				
 
-				
+/*				
 				Competitor move = competitors.get(competitors.size()-1);
 				competitors.remove((competitors.size()-1));
-				competitors.add(0, move );
+				competitors.add(0, move );*/
 				
 				
 				Competitor competitor = new Competitor();
@@ -421,7 +437,8 @@ public class CompetitionController {
 				+ "\" >Return to competition</a>  ";
 		model.addAttribute("button", button);
 
-		return "matchsaved";
+		return "redirect:/competitionstart/" + matchPost.getCompetition();
+	
 	}
 
 	@GetMapping("/createCompetition")
@@ -487,7 +504,7 @@ public class CompetitionController {
 
 		tournamentRepository.save(comp);
 
-		return "redirect:/createCompetition?success";
+		return "redirect:/competition";
 
 	}
 
@@ -957,7 +974,7 @@ public class CompetitionController {
 		{
 		
 			String kyu = "";
-		if(user.getBelt().equals("White") || user.getBelt().equals("Yellow"))
+		if(user.getBelt().equals("White") || user.getBelt().equals("Yellow") || user.getBelt().equals("Orange"))
 		{
 			kyu = "Lower Kyu";
 		}
@@ -1130,6 +1147,11 @@ public class CompetitionController {
 		String vic = userRepository.findOne(Long.parseLong(match.getVictor())).getFirstName() + " " +userRepository.findOne(Long.parseLong(match.getVictor())).getLastName();
 		String los = userRepository.findOne(Long.parseLong(match.getLoser())).getFirstName() + " " +userRepository.findOne(Long.parseLong(match.getLoser())).getLastName();
 		
+		long v = Long.parseLong(match.getVictor());
+		long l = Long.parseLong(match.getLoser());
+		
+		map.addAttribute("v", v);
+		map.addAttribute("l", l);
 		
 		map.addAttribute("match", match);
 		map.addAttribute("victor", vic);

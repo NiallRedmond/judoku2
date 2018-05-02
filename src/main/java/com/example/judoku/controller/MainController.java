@@ -2,6 +2,8 @@ package com.example.judoku.controller;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.annotation.SessionScope;
 
+import com.example.judoku.model.Competition;
 import com.example.judoku.model.Role;
+import com.example.judoku.model.Tournament;
 import com.example.judoku.model.User;
+import com.example.judoku.repository.CompetitionRepository;
 import com.example.judoku.repository.TournamentRepository;
 import com.example.judoku.repository.UserRepository;
 
@@ -28,11 +33,42 @@ public class MainController {
 
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	TournamentRepository tournamentRepository;
+	@Autowired
+	CompetitionRepository competitionRepository;
 
 	
     @GetMapping("/")
     public String root(ModelMap map, Principal principal) {
     	User user = userRepository.findByEmail(principal.getName());
+    	ArrayList<String> links = new ArrayList<String>();
+    	
+
+		ArrayList<Competition> comps = (ArrayList<Competition>) competitionRepository.findAll();
+		
+		for(Competition comp : comps)
+		{
+		       try {
+
+
+			if(Long.parseLong(comp.getGold()) == user.getId()    )
+			{
+				String link = "";
+
+				link = "<a href=\"http://localhost:8080/competitionstart/" + comp.getId() + "\"> 	<img src=\"/img/gold.png\" alt=\"gold\" title=\""+ comp.getName() +"\"> </a>";
+						 
+				links.add(link);
+
+			}
+		        } catch (NumberFormatException e) {
+	    		     
+ 		           System.out.println(e.getMessage());
+ 		        }
+			
+		}
+		
+	
        
     	String role = "Role_User";
 		User admin = userRepository.findByEmail(principal.getName());
@@ -41,6 +77,7 @@ public class MainController {
 				role = "Role_Admin";
 			}
 		}
+		map.addAttribute("links", links);
 		map.addAttribute("User", user);
 		map.addAttribute("role", role);
     	return "index";
@@ -61,6 +98,37 @@ public class MainController {
 	  
   
     	User user = userRepository.findOne(id);
+    	ArrayList<String> links = new ArrayList<String>();
+    	
+
+    		ArrayList<Competition> comps = (ArrayList<Competition>) competitionRepository.findAll();
+    		
+    		for(Competition comp : comps)
+    		{
+    		       try {
+
+   
+    			if(Long.parseLong(comp.getGold()) == user.getId()    )
+    			{
+    				String link = "";
+
+    				link = "<a href=\"http://localhost:8080/competitionstart/" + comp.getId() + "\"> 	<img src=\"/img/gold.png\" alt=\"gold\" title=\""+ comp.getName() +"\"> </a>";
+    						 
+    				links.add(link);
+
+    			}
+    		        } catch (NumberFormatException e) {
+    	    		     
+     		           System.out.println(e.getMessage());
+     		        }
+    			
+    		}
+    		
+    	
+    	
+    	
+    	
+    	
 		
     	
     	String role = "Role_User";
@@ -70,6 +138,7 @@ public class MainController {
 				role = "Role_Admin";
 			}
 		}
+		map.addAttribute("links", links);
 		map.addAttribute("User", user);
 		map.addAttribute("role", role);
 		

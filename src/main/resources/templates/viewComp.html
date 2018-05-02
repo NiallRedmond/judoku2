@@ -62,7 +62,7 @@
 				th:text="'Completed: ' + ${tournament.completed}"></li>
 
 
-			<li class="list-group-item" th:if="${tournament.signUpOpen == true}">
+			<li class="list-group-item" th:if="${tournament.signUpOpen == true and tournament.completed == false}">
 				<a th:href="@{/signup/} + ${id}" class="btn btn-info" role="button">Sign
 					up!</a>
 			</li>
@@ -151,9 +151,15 @@
 
 		</table>
 
+			<div th:if="${role == 'Role_Admin' and tournament.completed == true}">
+	<a  th:href="@{/admin/completeundo/} + ${tournament.id}"
+						>Unfinish tournament?</a>
+	
+	</div>
+
 
 	</div>
-		<p th:if="${tournament.completed == false}" th:utext="${button}"></p>
+
 </body>
 </html>
 
